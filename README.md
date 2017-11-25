@@ -33,7 +33,7 @@ $ java -jar /usr/local/lib/node_modules/jsonix-schema-compiler/lib/jsonix-schema
 
 This generates .js and oasis_names_....jsonschema files.
 
-## JSON schema limitations
+# JSON schema limitations
 - No support for (object-oriented) inheritance/polymorphism: https://github.com/json-schema-org/json-schema-spec/issues/348
 - Other issues considered for draft 7 (current version is draft 6):
 https://github.com/json-schema-org/json-schema-spec/milestone/5
