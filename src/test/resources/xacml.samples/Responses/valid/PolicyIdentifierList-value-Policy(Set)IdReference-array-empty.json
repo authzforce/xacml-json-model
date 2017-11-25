@@ -1,0 +1,9 @@
+{
+	"Response": 
+	[
+		{
+			"Decision": "Permit",
+			"PolicyIdentifierList": {"PolicyIdReference": [], "PolicySetIdReference": []}
+		}
+	]
+}

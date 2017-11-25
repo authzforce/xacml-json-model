@@ -1,0 +1,15 @@
+{
+	"Request": 
+	{
+		"Category": 
+		[
+			{
+				"CategoryId": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+				"Attribute": 
+				[
+				
+				]
+			}
+		]
+	}
+}

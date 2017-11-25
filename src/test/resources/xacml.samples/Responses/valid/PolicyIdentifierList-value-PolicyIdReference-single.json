@@ -1,0 +1,18 @@
+{
+	"Response": 
+	[
+		{
+			"Decision": "Permit",
+			"PolicyIdentifierList": 
+			{
+				"PolicyIdReference": 
+				[
+					{
+						"Id": "urn:oasis:names:tc:xacml:3.0:example:SimplePolicy1",
+						"Version": "1.0"
+					}
+				]
+			}
+		}
+	]
+}

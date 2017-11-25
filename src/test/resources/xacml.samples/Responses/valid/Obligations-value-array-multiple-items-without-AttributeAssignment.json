@@ -1,0 +1,17 @@
+{
+	"Response": 
+	[
+		{
+			"Decision": "Permit",
+			"Obligations": 
+			[
+				{
+					"Id": "urn:oasis:names:tc:xacml:example:obligation:email"
+				},
+				{
+					"Id": "urn:oasis:names:tc:xacml:example:obligation:log"
+				}
+			]
+		}
+	]
+}

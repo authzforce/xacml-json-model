@@ -1,0 +1,22 @@
+{
+	"Response": 
+	[
+		{
+			"Decision": "Permit",
+			"Obligations": 
+			[
+				{
+					"Id": "urn:oasis:names:tc:xacml:example:obligation:email",
+					"AttributeAssignment": 
+					[
+						{
+							"AttributeId": "urn:oasis:names:tc:xacml:3.0:example:attribute:text",
+							"Value": "Your medical record has been accessed",
+							"Bad": "stuff"
+						}
+					]
+				}
+			]
+		}
+	]
+}

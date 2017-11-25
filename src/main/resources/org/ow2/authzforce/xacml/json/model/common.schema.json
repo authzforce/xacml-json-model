@@ -1,0 +1,143 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema",
+	"$id": "http://authzforce.github.io/xacml-json-profile-model/schemas/1/common.schema.json",
+	"title": "Common JSON schema to Request and Response objects defined in JSON profile of XACML 3.0 v1.0",
+	"definitions": 
+	{
+		"AttributeValueType": 
+		{
+			"description": "Security warning: this definition allows any JSON object as value. TODO: find a way to validate it somehow. Possible solutions: 1) Modify this schema in production to restrict possible values as much as possible. 2) Any equivalent of XML processContents='strict'. 3) Any JSON processor that enforces a max text length, max number of keys, max object depth.",
+			"anyOf": 
+			[
+				{
+					"type": "boolean"
+				},
+
+				{
+					"type": "number"
+				},
+
+				{
+					"type": "string"
+				},
+
+				{
+					"type": "object"
+				},
+
+				{
+					"type": "array",
+					"items": 
+					{
+						"type": "boolean"
+					},
+
+					"minItems": 0
+				},
+
+				{
+					"type": "array",
+					"items": 
+					{
+						"type": ["string","number"]
+					},
+
+					"minItems": 0
+				},
+
+				{
+					"type": "array",
+					"items": 
+					{
+						"type": "object"
+					},
+
+					"minItems": 0
+				}
+			]
+		},
+
+		"AttributeType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"AttributeId": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"Issuer": 
+				{
+					"type": "string"
+				},
+
+				"IncludeInResult": 
+				{
+					"type": "boolean"
+				},
+
+				"DataType": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"Value": 
+				{
+					"$ref": "#/definitions/AttributeValueType"
+				}
+			},
+
+			"required": 
+			[
+				"AttributeId",
+				"Value"
+			],
+
+			"additionalProperties": false
+		},
+
+		"AttributeCategoryType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"CategoryId": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"Id": 
+				{
+					"type": "string"
+				},
+
+				"Content": 
+				{
+					"type": "string"
+				},
+
+				"Attribute": 
+				{
+					"type": "array",
+					"items": 
+					{
+						"$ref": "#/definitions/AttributeType"
+					},
+
+					"minItems": 0
+				}
+			},
+
+			"required": 
+			[
+				"CategoryId"
+			],
+
+			"additionalProperties": false
+		}
+	}
+}

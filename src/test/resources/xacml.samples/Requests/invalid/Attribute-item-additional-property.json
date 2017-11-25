@@ -1,0 +1,19 @@
+{
+	"Request": 
+	{
+		"Category": 
+		[
+			{
+				"CategoryId": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+				"Attribute": 
+				[
+					{
+						"Bad": "stuff",
+						"AttributeId": "urn:oasis:names:tc:xacml:1.0:subject:subject-id",
+						"Value": "Andreas"
+					}
+				]
+			}
+		]
+	}
+}

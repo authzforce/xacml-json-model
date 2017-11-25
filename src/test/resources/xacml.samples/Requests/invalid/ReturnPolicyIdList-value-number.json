@@ -1,0 +1,12 @@
+{
+	"Request": 
+	{
+		"ReturnPolicyIdList": 1,
+		"Category": 
+		[
+			{
+				"CategoryId": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+			}
+		]
+	}
+}

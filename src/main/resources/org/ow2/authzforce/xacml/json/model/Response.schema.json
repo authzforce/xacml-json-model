@@ -1,0 +1,370 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema",
+	"$id": "http://authzforce.github.io/xacml-json-profile-model/schemas/1/Response.schema.json",
+	"title": "JSON schema of Response object defined in JSON profile of XACML 3.0 v1.0",
+	"definitions": 
+	{
+		"DecisionType": 
+		{
+			"enum": 
+			[
+				"Permit",
+				"Deny",
+				"Indeterminate",
+				"NotApplicable"
+			],
+
+			"type": "string"
+		},
+
+		"IdReferenceType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"Id": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"Version": 
+				{
+					"type": "string"
+				}
+			},
+
+			"required": 
+			[
+				"Id"
+			],
+
+			"additionalProperties": false
+		},
+
+		"AttributeAssignmentType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"Category": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"AttributeId": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"Issuer": 
+				{
+					"type": "string"
+				},
+
+				"DataType": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"Value": 
+				{
+					"$ref": "common.schema.json#/definitions/AttributeValueType"
+				}
+			},
+
+			"required": 
+			[
+				"AttributeId",
+				"Value"
+			],
+
+			"additionalProperties": false
+		},
+
+		"ObligationOrAdviceType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"Id": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"AttributeAssignment": 
+				{
+					"type": "array",
+					"items": 
+					{
+						"$ref": "#/definitions/AttributeAssignmentType"
+					},
+
+					"minItems": 0
+				}
+			},
+
+			"required": 
+			[
+				"Id"
+			],
+
+			"additionalProperties": false
+		},
+
+		"ObligationsType": 
+		{
+			"description": "at least one item according to 5.1 Class diagram",
+			"items": 
+			{
+				"$ref": "#/definitions/ObligationOrAdviceType"
+			},
+
+			"minItems": 1
+		},
+
+		"AssociatedAdviceType": 
+		{
+			"description": "at least one item according to 5.1 Class diagram",
+			"type": "array",
+			"items": 
+			{
+				"$ref": "#/definitions/ObligationOrAdviceType"
+			},
+
+			"minItems": 1
+		},
+
+		"StatusCodeType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"Value": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"StatusCode": 
+				{
+					"$ref": "#/definitions/StatusCodeType"
+				}
+			},
+
+			"required": 
+			[
+				"Value"
+			],
+
+			"additionalProperties": false
+		},
+
+		"MissingAttributeDetailType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"AttributeValue": 
+				{
+					"type": "array",
+					"items": 
+					{
+						"$ref": "common.schema.json#/definitions/AttributeValueType"
+					},
+
+					"minItems": 0
+				},
+
+				"Category": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"AttributeId": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"DataType": 
+				{
+					"type": "string",
+					"format": "uri"
+				},
+
+				"Issuer": 
+				{
+					"type": "string"
+				}
+			},
+
+			"required": 
+			[
+				"Category",
+				"AttributeId",
+				"DataType"
+			],
+
+			"additionalProperties": false
+		},
+
+		"StatusType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"StatusCode": 
+				{
+					"$ref": "#/definitions/StatusCodeType"
+				},
+
+				"StatusDetail": 
+				{
+					"oneOf": 
+					[
+						{
+							"type": "string"
+						},
+
+						{
+							"type": "array",
+							"items": 
+							{
+								"$ref": "#/definitions/MissingAttributeDetailType"
+							},
+
+							"minItems": 1
+						}
+					]
+				},
+
+				"StatusMessage": 
+				{
+					"type": "string"
+				}
+			},
+
+			"required": 
+			[
+				"StatusCode"
+			],
+
+			"additionalProperties": false
+		},
+
+		"ResultType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"Decision": 
+				{
+					"$ref": "#/definitions/DecisionType"
+				},
+
+				"Status": 
+				{
+					"$ref": "#/definitions/StatusType"
+				},
+
+				"Obligations": 
+				{
+					"$ref": "#/definitions/ObligationsType"
+				},
+
+				"AssociatedAdvice": 
+				{
+					"$ref": "#/definitions/AssociatedAdviceType"
+				},
+
+				"Category": 
+				{
+					"description": "Single-valued or an array of Category objects",
+					"oneOf": 
+					[
+						{
+							"$ref": "common.schema.json#/definitions/AttributeCategoryType"
+						},
+
+						{
+							"type": "array",
+							"items": 
+							{
+								"$ref": "common.schema.json#/definitions/AttributeCategoryType"
+							},
+
+							"minItems": 0
+						}
+					]
+				},
+
+				"PolicyIdentifierList": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"PolicyIdReference": 
+						{
+							"type": "array",
+							"items": 
+							{
+								"$ref": "#/definitions/IdReferenceType"
+							}
+						},
+
+						"PolicySetIdReference": 
+						{
+							"type": "array",
+							"items": 
+							{
+								"$ref": "#/definitions/IdReferenceType"
+							}
+						}
+					},
+
+					"additionalProperties": false
+				}
+			},
+
+			"required": 
+			[
+				"Decision"
+			],
+
+			"additionalProperties": false
+		},
+
+		"ResponseType": 
+		{
+			"type": "array",
+			"items": 
+			{
+				"$ref": "#/definitions/ResultType"
+			},
+
+			"minItems": 1
+		}
+	},
+
+	"type": "object",
+	"properties": 
+	{
+		"Response": 
+		{
+			"$ref": "#/definitions/ResponseType"
+		}
+	},
+
+	"required": 
+	[
+		"Response"
+	],
+
+	"additionalProperties": false
+}
