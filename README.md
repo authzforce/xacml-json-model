@@ -1,3 +1,5 @@
+[![Javadocs](http://javadoc.io/badge/org.ow2.authzforce/authzforce-ce-xacml-json-model.svg)](http://javadoc.io/doc/org.ow2.authzforce/authzforce-ce-xacml-json-model)
+
 This project provides [JSON schemas](src/main/resources/org/ow2/authzforce/xacml/json/model) for validating XACML Request/Response according to JSON Profile of XACMl 3.0, as well as a [library](src/main/java/org/ow2/authzforce/xacml/json/model/Xacml3JsonUtils.java) for validating XACML Requests/Responses against:
 
 1. [Those JSON schemas](src/main/resources/org/ow2/authzforce/xacml/json/model);
