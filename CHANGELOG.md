@@ -2,6 +2,19 @@
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
 
+## 2.0.0
+### Changed
+- Parent project version (authzforce-ce-parent):7.3.0
+	- Managed dependency versions:
+		- Spring: 4.3.14.RELEASE
+- Renamed Xacml3JsonUtils class to XacmlJsonUtils
+- Replaced format uri with uri-reference in JSON schemas to match XML anyURI
+
+### Added
+- Added maven build plugins: dependency-check-maven, pmd, findbugs, surefire, licence
+- New JSON schema in file `Policy.schema.json` for XACML-equivalent JSON policies (actually a superset of XACML model), ie. non-standard XACML/JSON schema defined by AuthzForce
+
+
 ## 1.1.0
 ### Changed
 - Parent project version (authzforce-ce-parent): 7.0.0 -> 7.1.0
