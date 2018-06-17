@@ -65,7 +65,7 @@
 				"AttributeId": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"Issuer": 
@@ -81,7 +81,7 @@
 				"DataType": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"Value": 
@@ -107,7 +107,7 @@
 				"CategoryId": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"Id": 
@@ -135,6 +135,31 @@
 			"required": 
 			[
 				"CategoryId"
+			],
+
+			"additionalProperties": false
+		},
+		
+		"IdReferenceType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"Id": 
+				{
+					"type": "string",
+					"format": "uri-reference"
+				},
+
+				"Version": 
+				{
+					"type": "string"
+				}
+			},
+
+			"required": 
+			[
+				"Id"
 			],
 
 			"additionalProperties": false

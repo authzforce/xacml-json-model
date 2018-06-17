@@ -1,0 +1,37 @@
+{
+	"policy": {
+		"id": "root",
+		"version": "1.0",
+		"description": "Currently, there is only one 'policyRef' for Kafka resource type 'TOPIC', but there may be other resource types added in the future, such as GROUP and CLUSTER",
+		"combiningAlgId": "urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:deny-unless-permit",
+		"rules": [
+			{
+				"id": "Superadmin",
+				"effect": "Permit",
+				"target": [
+					[
+						[
+							{
+								"matchFunction": "urn:oasis:names:tc:xacml:1.0:function:string-equal",
+								"value": "User:admin",
+								"attributeDesignator": {
+									"category": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+									"id": "urn:oasis:names:tc:xacml:1.0:subject:subject-id",
+									"dataType": "http://www.w3.org/2001/XMLSchema#string",
+									"mustBePresent": true
+								}
+							}
+						]
+					]
+				]
+			}
+		],
+		"policies": [
+			{
+				"policyRef": {
+					"id": "resource.type=TOPIC"
+				}
+			}
+		]
+	}
+}

@@ -14,7 +14,7 @@
 					"type": "array",
 					"items": 
 					{
-						"description": "each item is a Category/Id",
+						"description": "Each item is a Category/Id",
 						"type": "string"
 					},
 

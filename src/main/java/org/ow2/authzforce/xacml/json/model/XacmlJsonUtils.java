@@ -1,3 +1,20 @@
+/**
+ * Copyright 2012-2018 Thales Services SAS.
+ *
+ * This file is part of AuthzForce CE.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.ow2.authzforce.xacml.json.model;
 
 import java.io.IOException;
@@ -16,9 +33,9 @@ import com.google.common.collect.ImmutableMap;
  * Instances of JSON schema as defined by JSON Profile of XACML 3.0
  *
  */
-public final class Xacml3JsonUtils
+public final class XacmlJsonUtils
 {
-	private Xacml3JsonUtils()
+	private XacmlJsonUtils()
 	{
 		// hide constructor
 	}
@@ -32,6 +49,11 @@ public final class Xacml3JsonUtils
 	 * JSON schema for validating Responses according to JSON Profile of XACML 3.0
 	 */
 	public static final Schema RESPONSE_SCHEMA;
+	
+	/**
+	 * JSON schema for validating Policies according to AuthzForce/JSON policy format for XACML Policy(Set) (see Policy.schema.json)
+	 */
+	public static final Schema POLICY_SCHEMA;
 
 	static
 	{
@@ -52,6 +74,16 @@ public final class Xacml3JsonUtils
 		{
 			final JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
 			RESPONSE_SCHEMA = SchemaLoader.load(rawSchema, schemaClient);
+		}
+		catch (final IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		
+		try (InputStream inputStream = SpringBasedJsonSchemaClient.class.getResourceAsStream("Policy.schema.json"))
+		{
+			final JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
+			POLICY_SCHEMA = SchemaLoader.load(rawSchema, schemaClient);
 		}
 		catch (final IOException e)
 		{

@@ -1,0 +1,106 @@
+{
+				"policy": {
+					"id": "resource-id=TOPIC_A",
+					"target": 
+					[[[{
+						"matchFunction": "urn:oasis:names:tc:xacml:1.0:function:string-equal",
+						"value": "TOPIC_A",
+						"attributeDesignator": {
+							"category": "urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
+								"id": "urn:oasis:names:tc:xacml:1.0:resource:resource-id",
+								"dataType": "http://www.w3.org/2001/XMLSchema#string",
+								"mustBePresent": true
+						}	
+					}]]],
+					"combiningAlgId": "urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable",
+					"policies": [
+						{
+							"policy": 
+							{
+								"id": "subject-id=clientID1",
+								"target": 
+								[[[{
+									"matchFunction": "urn:oasis:names:tc:xacml:1.0:function:string-equal",
+									"value": "clientID1",
+									"attributeDesignator": {
+										"category": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+										"id": "urn:oasis:names:tc:xacml:1.0:subject:subject-id",
+										"dataType": "http://www.w3.org/2001/XMLSchema#string",
+										"mustBePresent": true
+									}	
+								}]]],
+								"combiningAlgId": "urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable",
+								"rules": 
+								[
+									{
+										"id": "Client1_can_publish_to_the_topic ",
+										"effect": "Permit",
+										"target": 
+										[[[{
+											"matchFunction": "urn:oasis:names:tc:xacml:1.0:function:string-equal",
+											"value": "PUBLISH",
+											"attributeDesignator": {
+												"category": "urn:oasis:names:tc:xacml:3.0:attribute-category:action",
+												"id": "urn:oasis:names:tc:xacml:1.0:action:action-id",
+													"dataType": "http://www.w3.org/2001/XMLSchema#string",
+													"mustBePresent": true
+											}
+										}]]]
+									},
+									{
+										"id": "Client1_cannot_subscribe_to_the_topic ",
+										"effect": "Deny",
+										"target": 
+										[[[{
+											"matchFunction": "urn:oasis:names:tc:xacml:1.0:function:string-equal",
+											"value": "SUBSCRIBE",
+											"attributeDesignator": {
+												"category": "urn:oasis:names:tc:xacml:3.0:attribute-category:action",
+												"id": "urn:oasis:names:tc:xacml:1.0:action:action-id",
+													"dataType": "http://www.w3.org/2001/XMLSchema#string",
+													"mustBePresent": true
+											}
+										}]]]
+									}
+								]
+							}
+						},
+						{
+							"policy": 
+							{
+								"id": "subject-id=clientID2",
+								"target": 
+								[[[{
+									"matchFunction": "urn:oasis:names:tc:xacml:1.0:function:string-equal",
+									"value": "clientID2",
+									"attributeDesignator": {
+										"category": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+										"id": "urn:oasis:names:tc:xacml:1.0:subject:subject-id",
+										"dataType": "http://www.w3.org/2001/XMLSchema#string",
+										"mustBePresent": true
+									}	
+								}]]],
+								"combiningAlgId": "urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable",
+								"rules": 
+								[
+									{
+										"id": "ClientID2_can_subscribe_to_the_topic ",
+										"effect": "Permit",
+										"target": 
+										[[[{
+											"matchFunction": "urn:oasis:names:tc:xacml:1.0:function:string-equal",
+											"value": "SUBSCRIBE",
+											"attributeDesignator": {
+												"category": "urn:oasis:names:tc:xacml:3.0:attribute-category:action",
+												"id": "urn:oasis:names:tc:xacml:1.0:action:action-id",
+													"dataType": "http://www.w3.org/2001/XMLSchema#string",
+													"mustBePresent": true
+											}
+										}]]]
+									}
+								]
+							}	
+						}
+					]
+				}
+}
