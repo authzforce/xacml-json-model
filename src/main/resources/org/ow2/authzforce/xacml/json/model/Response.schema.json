@@ -17,31 +17,6 @@
 			"type": "string"
 		},
 
-		"IdReferenceType": 
-		{
-			"type": "object",
-			"properties": 
-			{
-				"Id": 
-				{
-					"type": "string",
-					"format": "uri"
-				},
-
-				"Version": 
-				{
-					"type": "string"
-				}
-			},
-
-			"required": 
-			[
-				"Id"
-			],
-
-			"additionalProperties": false
-		},
-
 		"AttributeAssignmentType": 
 		{
 			"type": "object",
@@ -50,13 +25,13 @@
 				"Category": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"AttributeId": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"Issuer": 
@@ -67,7 +42,7 @@
 				"DataType": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"Value": 
@@ -93,7 +68,7 @@
 				"Id": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"AttributeAssignment": 
@@ -147,7 +122,7 @@
 				"Value": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"StatusCode": 
@@ -183,19 +158,19 @@
 				"Category": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"AttributeId": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"DataType": 
 				{
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 
 				"Issuer": 
@@ -314,7 +289,7 @@
 							"type": "array",
 							"items": 
 							{
-								"$ref": "#/definitions/IdReferenceType"
+								"$ref": "common.schema.json#/definitions/IdReferenceType"
 							}
 						},
 
@@ -323,7 +298,7 @@
 							"type": "array",
 							"items": 
 							{
-								"$ref": "#/definitions/IdReferenceType"
+								"$ref": "common.schema.json#/definitions/IdReferenceType"
 							}
 						}
 					},

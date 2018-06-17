@@ -39,3 +39,17 @@ $ java -jar /usr/local/lib/node_modules/jsonix-schema-compiler/lib/jsonix-schema
 ```
 
 This generates .js and oasis_names_....jsonschema files.
+
+# Differences between Policy's JSON schema and XML schema from XACML spec
+* Policy/Rule's Version is optional in JSON schema
+* Policy's PolicyIssuer does not have a Content element
+* Policy may have a Condition (in addition to Target)
+* Rule may have VariableDefinitions 
+* Match may have VariableReference (in addition to AttributeDesignator/AttributeSelector)
+* Apply must have at least one arg to the function
+* Type PepActionExpression replaces Obligation/Advice with a boolean property "required" to make the difference (=true for Obligation, =false for Advice)
+* Datatype defined at Attribute level, not AttributeValue level, like in XACML/JSON Profile
+* Parts of model happen to be not feasible or more complex to achieve than XACML/XML schema due to limitations of JSON schema or of the implementation library (everit json-schema). More info:
+http://json-schema.org/draft-06/json-schema-release-notes.html#q-what-happened-to-all-the-discussions-around-re-using-schemas-with-additionalproperties
+https://github.com/everit-org/json-schema/issues/184#issuecomment-393419878
+Should be fixed in next draft 08: https://github.com/json-schema-org/json-schema-org.github.io/issues/77
