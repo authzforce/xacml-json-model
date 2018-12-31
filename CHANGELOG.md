@@ -2,6 +2,14 @@
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
 
+## 2.1.0
+### Changed
+- Parent project version (authzforce-ce-parent):7.5.0
+	- Managed dependency versions:
+		- Spring: 4.3.18 (fixes CVE)
+- Copyright company name
+
+
 ## 2.0.0
 ### Changed
 - Parent project version (authzforce-ce-parent):7.3.0
