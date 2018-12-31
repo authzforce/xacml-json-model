@@ -1,32 +1,13 @@
-<!--
-
-    Copyright 2012-2018 Thales Services SAS.
-
-    This file is part of AuthzForce CE.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <parent>
       <groupId>org.ow2.authzforce</groupId>
       <artifactId>authzforce-ce-parent</artifactId>
-      <version>7.3.0</version>
+      <version>7.5.0</version>
    </parent>
    <artifactId>authzforce-ce-xacml-json-model</artifactId>
    <packaging>jar</packaging>
-   <version>1.2.1-SNAPSHOT</version>
+   <version>2.0.1-SNAPSHOT</version>
    <name>${project.groupId}:${project.artifactId}</name>
    <description>AuthzForce - Data model for JSON Profile of XACML 3.0</description>
    <url>${project.url}</url>
@@ -133,11 +114,11 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<header>LICENSE_HEADER.txt</header>
-<!-- 					<includes> -->
-<!-- 						<include>src/main/java/org/ow2/authzforce/**</include> -->
+					<includes>
+						<include>src/main/java/org/ow2/authzforce/**</include>
 <!-- 						Include test files also -->
-<!-- 						<include>src/test/java/org/ow2/authzforce/**</include> -->
-<!-- 					</includes> -->
+						<include>src/test/java/org/ow2/authzforce/**</include>
+					</includes>
 				</configuration>
 				<executions>
 					<execution>
