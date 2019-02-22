@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
+## 2.1.1
+### Fixed
+- CVE affecting Spring v4.3.18: upgraded to 4.3.20
+
 
 ## 2.1.0
 ### Changed
