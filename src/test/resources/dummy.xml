@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Namespace must match one the namespaces used in one of the XSLT templates in the XSLT stylesheet used by Ant XSLT task -->
+<dummy xmlns="http://www.w3.org/2005/xpath-functions" />

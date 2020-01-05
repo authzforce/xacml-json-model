@@ -1,5 +1,5 @@
 /**
- * Copyright 2012-2019 THALES.
+ * Copyright 2012-2020 THALES.
  *
  * This file is part of AuthzForce CE.
  *
@@ -25,11 +25,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import javax.xml.bind.JAXBException;
 
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.json.JSONObject;
+import org.ow2.authzforce.xacml.Xacml3JaxbHelper;
 import org.ow2.authzforce.xacml.json.model.LimitsCheckingJSONObject;
 import org.ow2.authzforce.xacml.json.model.XacmlJsonUtils;
 import org.slf4j.Logger;
@@ -52,8 +62,17 @@ public class XacmlJsonSchemaValidationTest
 
 	private static final int MAX_JSON_DEPTH = 100;
 
-	private static final String[] XACML_DATA_DIRECTORY_LOCATIONS = { "src/test/resources/xacml.samples/Policies", "src/test/resources/xacml.samples/Requests",
-	        "src/test/resources/xacml.samples/Responses" };
+	/*
+	 * Source XACML/JSON files (not generated from XACML/XML files)
+	 */
+	private static final String[] SRC_XACML_JSON_DATA_DIRECTORY_LOCATIONS = { "src/test/resources/xacml+json.samples/Policies", "src/test/resources/xacml+json.samples/Requests",
+	        "src/test/resources/xacml+json.samples/Responses" };
+
+	private static final String[] SRC_XACML_XML_CONFORMANCE_TEST_DATA_PARENT_DIRECTORY_LOCATIONS = { "src/test/resources/xacml+xml.samples/xacml-3.0-ct/mandatory",
+	        "src/test/resources/xacml+xml.samples/xacml-3.0-ct/optional" };
+
+	private static final String[] GEN_XACML_XML_CONFORMANCE_TEST_DATA_PARENT_DIRECTORY_LOCATIONS = { "target/generated-test-resources/xacml-xslt-outputs/xacml-3.0-ct/mandatory",
+	        "target/generated-test-resources/xacml-xslt-outputs/xacml-3.0-ct/optional" };
 
 	/**
 	 * Create test data. Various Requests/Responses in XACML JSON Profile defined format
@@ -66,11 +85,44 @@ public class XacmlJsonSchemaValidationTest
 	@DataProvider(name = "xacmlJsonDataProvider")
 	public Iterator<Object[]> createData() throws URISyntaxException, IOException
 	{
-		return TestDataProvider.createData(XACML_DATA_DIRECTORY_LOCATIONS);
+		final List<Entry<File, File>> testDataDirLocations = Arrays.stream(SRC_XACML_JSON_DATA_DIRECTORY_LOCATIONS).map(loc -> new AbstractMap.SimpleImmutableEntry<>(new File(loc), (File) null))
+		        .collect(Collectors.toList());
+		for (int i = 0; i < GEN_XACML_XML_CONFORMANCE_TEST_DATA_PARENT_DIRECTORY_LOCATIONS.length; i++)
+		{
+			final String loc = GEN_XACML_XML_CONFORMANCE_TEST_DATA_PARENT_DIRECTORY_LOCATIONS[i];
+			try
+			{
+				final int testDataParentDirIndex = i;
+				Files.newDirectoryStream(Paths.get(loc)).forEach(testDataDirPath -> testDataDirLocations.add(new AbstractMap.SimpleImmutableEntry(testDataDirPath.toFile(),
+				        new File(SRC_XACML_XML_CONFORMANCE_TEST_DATA_PARENT_DIRECTORY_LOCATIONS[testDataParentDirIndex], testDataDirPath.getFileName().toString()))));
+				i++;
+			}
+			catch (final IOException e)
+			{
+				throw new RuntimeException("I/O error opening location '" + loc + "' as directory to iterate over its entries", e);
+			}
+		}
+
+		final Iterator<Object[]> testData = TestDataProvider.createData(testDataDirLocations);
+		return testData;
 	}
 
 	@Test(dataProvider = "xacmlJsonDataProvider")
-	public void validateXacmlJson(final File xacmlJsonFile, final boolean expectedValid, final ITestContext testCtx) throws FileNotFoundException, IOException
+	/**
+	 * 
+	 * @param xacmlJsonFile
+	 * @param expectedXacmlXmlFile
+	 * @param expectedValid
+	 *            true iff validation against JSON schema should succeed
+	 * @param xacmlXmlFile
+	 *            XACML/XML file generated from {@code expectedXacmlXmlFile} by XSLT (during maven generate-test-resources phase) for XACML/XML->XACML/JSON conversion, then XSLT for XACML/JSON ->
+	 *            XACML/XML conversion back; may be null if no XACML/XML file exists (expected to have been converted from {@code xacmlJsonFile}, therefore should be equivalent)
+	 * @param testCtx
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void validateXacmlJson(final File xacmlJsonFile, final boolean expectedValid, final File expectedXacmlXmlFile, final File actualXacmlXmlFile, final ITestContext testCtx)
+	        throws FileNotFoundException, IOException, JAXBException
 	{
 		/*
 		 * Read properly as UTF-8 to avoid character decoding issues with org.json API
@@ -110,12 +162,22 @@ public class XacmlJsonSchemaValidationTest
 			}
 			catch (final ValidationException e)
 			{
-				LOGGER.debug(e.toJSON().toString(4));
+				LOGGER.error("Error validating JSON file: '{}'\n{}", xacmlJsonFile, e.toJSON().toString(2));
 
 				if (expectedValid)
 				{
 					Assert.fail("Validation against JSON schema failed but expected to pass");
 				}
+			}
+
+			/*
+			 * Validation of XACML/XML output from JSON-to-XML XSLT if any
+			 */
+			if (actualXacmlXmlFile != null)
+			{
+				final Object expectedXacmlJaxbObj = Xacml3JaxbHelper.createXacml3Unmarshaller().unmarshal(expectedXacmlXmlFile);
+				final Object actualXacmlJaxbObj = Xacml3JaxbHelper.createXacml3Unmarshaller().unmarshal(actualXacmlXmlFile);
+				Assert.assertEquals(actualXacmlJaxbObj, expectedXacmlJaxbObj, "Source XACML/XML file and generated XACML/XML file after XML->JSON->XML (XSLT) conversion do not match");
 			}
 		}
 	}

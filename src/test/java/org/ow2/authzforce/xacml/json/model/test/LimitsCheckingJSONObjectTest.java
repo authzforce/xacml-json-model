@@ -1,5 +1,5 @@
 /**
- * Copyright 2012-2019 THALES.
+ * Copyright 2012-2020 THALES.
  *
  * This file is part of AuthzForce CE.
  *
@@ -23,7 +23,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,16 +64,29 @@ public class LimitsCheckingJSONObjectTest
 	@DataProvider(name = "jsonDataProvider")
 	public Iterator<Object[]> createData() throws URISyntaxException, IOException
 	{
-		return TestDataProvider.createData(TEST_DATA_DIRECTORY_LOCATIONS);
+		return TestDataProvider.createData(Arrays.stream(TEST_DATA_DIRECTORY_LOCATIONS).map(loc -> new AbstractMap.SimpleImmutableEntry<>(new File(loc), (File) null)).collect(Collectors.toList()));
 	}
 
 	@Test(dataProvider = "jsonDataProvider")
-	public void test(final File jsonFile, final boolean expectedValid, final ITestContext testCtx) throws FileNotFoundException, IOException, JSONException
+	/**
+	 * 
+	 * @param xacmlJsonFile
+	 * @param expectedValid
+	 *            true iff validation against JSON schema should succeed
+	 * @param srcXacmlXmlFile
+	 * @param genXacmlXmlFileFromXslt
+	 *            Parameter not used by this test method but value returned anyway by the dataProvider (shared with other tests).
+	 * @param testCtx
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void test(final File xacmlJsonFile, final boolean expectedValid, final File srcXacmlXmlFile, final File genXacmlXmlFileFromXslt, final ITestContext testCtx)
+	        throws FileNotFoundException, IOException, JSONException
 	{
 		/*
 		 * Read properly as UTF-8 to avoid character decoding issues with org.json API
 		 */
-		try (final InputStream in = new FileInputStream(jsonFile))
+		try (final InputStream in = new FileInputStream(xacmlJsonFile))
 		{
 			try
 			{

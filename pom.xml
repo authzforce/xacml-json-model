@@ -1,63 +1,65 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <parent>
-      <groupId>org.ow2.authzforce</groupId>
-      <artifactId>authzforce-ce-parent</artifactId>
-      <version>7.5.1</version>
-   </parent>
-   <artifactId>authzforce-ce-xacml-json-model</artifactId>
-   <packaging>jar</packaging>
-   <version>2.1.1</version>
-   <name>${project.groupId}:${project.artifactId}</name>
-   <description>AuthzForce - Data model for JSON Profile of XACML 3.0</description>
-   <url>${project.url}</url>
-   <scm>
-      <connection>scm:git:${git.url.base}/xacml-json-model.git</connection>
-      <developerConnection>scm:git:${git.url.base}/xacml-json-model.git</developerConnection>
-      <tag>HEAD</tag>
-      <!-- Publicly browsable repository URL. For example, via Gitlab web UI. -->
-      <url>${git.url.base}/xacml-json-model</url>
-   </scm>
-   <repositories>
-      <repository>
-         <!-- For org.everit.json.schema -->
-         <id>jitpack.io</id>
-         <url>https://jitpack.io</url>
-      </repository>
-   </repositories>
-   <dependencies>
-      <dependency>
-         <!-- Needed for org.springframework.util.ResourceUtils,SystemPropertyUtils,FileCopyUtils, etc. -->
-         <groupId>org.springframework</groupId>
-         <artifactId>spring-core</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>com.github.everit-org.json-schema</groupId>
-         <artifactId>org.everit.json.schema</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.testng</groupId>
-         <artifactId>testng</artifactId>
-         <version>6.11</version>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>ch.qos.logback</groupId>
-         <artifactId>logback-classic</artifactId>
-         <scope>test</scope>
-      </dependency>
-   </dependencies>
-   <build>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.ow2.authzforce</groupId>
+		<artifactId>authzforce-ce-parent</artifactId>
+		<version>7.5.1</version>
+	</parent>
+	<artifactId>authzforce-ce-xacml-json-model</artifactId>
+	<packaging>jar</packaging>
+	<version>2.2.0</version>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>AuthzForce - Data model for JSON Profile of XACML 3.0</description>
+	<url>${project.url}</url>
+	<scm>
+		<connection>scm:git:${git.url.base}/xacml-json-model.git</connection>
+		<developerConnection>scm:git:${git.url.base}/xacml-json-model.git</developerConnection>
+		<tag>HEAD</tag>
+		<!-- Publicly browsable repository URL. For example, via Gitlab web UI. -->
+		<url>${git.url.base}/xacml-json-model</url>
+	</scm>
+	<repositories>
+		<repository>
+			<!-- For org.everit.json.schema -->
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<!-- Needed for org.springframework.util.ResourceUtils,SystemPropertyUtils,FileCopyUtils, etc. -->
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.everit-org.json-schema</groupId>
+			<artifactId>org.everit.json.schema</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.authzforce</groupId>
+			<artifactId>authzforce-ce-xacml-model</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
 		<plugins>
 			<plugin>
-				<!-- Consider combining with Red Hat Victims and OSS Index. More info 
-					on Victims vs. Dependency-check: https://bugzilla.redhat.com/show_bug.cgi?id=1388712 -->
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
 				<configuration>
 					<cveValidForHours>24</cveValidForHours>
-					<!-- The plugin has numerous issues with version matching, which triggers 
-						false positives so we need a "suppresion" file for those. More info: https://github.com/jeremylong/DependencyCheck/issues -->
+					<!-- The plugin has numerous issues with version matching, which triggers false positives so we need a "suppresion" file for those. More info: https://github.com/jeremylong/DependencyCheck/issues -->
 					<suppressionFile>owasp-dependency-check-suppression.xml</suppressionFile>
 					<failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
 				</configuration>
@@ -72,14 +74,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<!-- target JDK already set by parent project's maven.compiler.target 
-					property -->
+				<!-- target JDK already set by parent project's maven.compiler.target property -->
 				<configuration>
 					<verbose>true</verbose>
-<!-- 					<excludeRoots> -->
-<!-- 						<excludeRoot>target/generated-sources/xjc</excludeRoot> -->
-<!-- 						<excludeRoot>target/generated-test-sources/xjc</excludeRoot> -->
-<!-- 					</excludeRoots> -->
+					<!-- <excludeRoots> -->
+					<!-- <excludeRoot>target/generated-sources/xjc</excludeRoot> -->
+					<!-- <excludeRoot>target/generated-test-sources/xjc</excludeRoot> -->
+					<!-- </excludeRoots> -->
 				</configuration>
 				<executions>
 					<execution>
@@ -108,15 +109,14 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<!-- Override license-maven-plugin configuration to exclude Sunxacml 
-					files from adding GPL license headers (different license) -->
+				<!-- Override license-maven-plugin configuration to exclude SunXACML files from adding GPL license headers (different license) -->
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<header>LICENSE_HEADER.txt</header>
 					<includes>
 						<include>src/main/java/org/ow2/authzforce/**</include>
-<!-- 						Include test files also -->
+						<!-- Include test files also -->
 						<include>src/test/java/org/ow2/authzforce/**</include>
 					</includes>
 				</configuration>
@@ -138,21 +138,81 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<!-- This execution of surefire is overwritten by a default one unless 
-					we specify a different version in pluginManagement. -->
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.saxon</groupId>
+						<artifactId>Saxon-HE</artifactId>
+						<version>9.8.0-15</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.ivy</groupId>
+						<artifactId>ivy</artifactId>
+						<version>2.4.0</version>
+					</dependency>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<!-- depends on ant 1.5 -->
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>xacml-mandatory-xslt</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<taskdef resource="net/sf/antcontrib/antlib.xml" />
+								<ant antfile="${project.basedir}/src/test/resources/build.xml" inheritAll="false" inheritRefs="false">
+									<property name="src.dir" value="${project.basedir}/src/test/resources/xacml+xml.samples/xacml-3.0-ct/mandatory" />
+									<property name="target.dir" value="${project.basedir}/target/generated-test-resources/xacml-xslt-outputs/xacml-3.0-ct/mandatory" />
+									<target name="convert-xacml-policies-xml-to-json-and-back" />
+								</ant>
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>xacml-optional-xslt</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<taskdef resource="net/sf/antcontrib/antlib.xml" />
+								<ant antfile="${project.basedir}/src/test/resources/build.xml" inheritAll="false" inheritRefs="false">
+									<property name="src.dir" value="${project.basedir}/src/test/resources/xacml+xml.samples/xacml-3.0-ct/optional" />
+									<property name="target.dir" value="${project.basedir}/target/generated-test-resources/xacml-xslt-outputs/xacml-3.0-ct/optional" />
+									<target name="convert-xacml-policies-xml-to-json-and-back" />
+								</ant>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<!-- This execution of surefire is overwritten by a default one unless we specify a different version in pluginManagement. -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<!-- <suiteXmlFiles> -->
 					<!-- Parameters in the XML files seem to be ignored (more info: http://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html) -->
-					<!-- Using multiple test suites simplifies debugging and prevent some 
-						TestNG issues happening when reusing same class/methods over multiple tests 
-						in same test suite -->
+					<!-- Using multiple test suites simplifies debugging and prevent some TestNG issues happening when reusing same class/methods over multiple tests in same test suite -->
 					<!-- <suiteXmlFile>src/test/suite.xml</suiteXmlFile> -->
 					<!-- </suiteXmlFiles> -->
 					<skipAfterFailureCount>1</skipAfterFailureCount>
-					<!-- redirectTestOutputToFile: set this to 'true' to redirect the unit 
-						test standard output to a file (found in reportsDirectory/testName-output.txt) -->
+					<!-- redirectTestOutputToFile: set this to 'true' to redirect the unit test standard output to a file (found in reportsDirectory/testName-output.txt) -->
 					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 					<systemPropertyVariables>
 						<javax.xml.accessExternalSchema>all</javax.xml.accessExternalSchema>
@@ -160,8 +220,7 @@
 					<properties>
 						<property>
 							<name>surefire.testng.verbose</name>
-							<!-- verbosity level from 0 to 10 (10 is the most detailed), or -1 
-								for debug More info: http://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html -->
+							<!-- verbosity level from 0 to 10 (10 is the most detailed), or -1 for debug More info: http://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html -->
 							<value>2</value>
 						</property>
 					</properties>

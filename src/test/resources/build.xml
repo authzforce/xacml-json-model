@@ -1,0 +1,121 @@
+<!-- On Ubuntu, do this first: $ sudo apt-get install ivy ant-contrib-->
+<project name="authzforce-ce-xacml-json-model-convert-policies" default="convert-xacml-policies-xml-to-json-and-back" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ac="antlib:net.sf.antcontrib">
+	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant">
+		<classpath>
+			<!-- Valid path to ivy on Ubuntu when installed with APT -->
+			<pathelement location="/usr/share/java/ivy.jar" />
+		</classpath>
+	</taskdef>
+
+	<property name="src.dir" value="" description="root directory containing subdirectories of xacml/xml files to be converted (property overridden in Maven POM)" />
+	<property name="target.dir" value="" description="root directory where to put the conversion results (property overridden in Maven POM)" />
+
+	<macrodef name="xml-xslt">
+		<attribute name="basedir" />
+		<attribute name="destdir" />
+		<attribute name="includes" />
+		<attribute name="xsl" />
+		<attribute name="extension" />
+		<attribute name="usejsonprofile" />
+		<sequential>
+			<xslt processor="trax" basedir="@{basedir}" destdir="@{destdir}" style="@{xsl}" includes="@{includes}" extension="@{extension}" classpathref="lib.path.id">
+				<!-- parameters used by XSL stylesheet -->
+				<param name="useJsonProfile" expression="@{usejsonprofile}" />
+				<!--         							 
+    							 More info on using XSLT task with Saxon 9.8:
+    							 https://www.saxonica.com/documentation9.8/index.html#!using-xsl/xsltfromant
+    							-->
+				<factory name="net.sf.saxon.TransformerFactoryImpl">
+					<!-- Using a SAXON configuration file
+        							<attribute name="http://saxon.sf.net/feature/configuration-file" 
+        							               value="config-de.xml"/>
+        							               -->
+					<!-- XML 1.1 required to support backspace character -->
+					<attribute name="http://saxon.sf.net/feature/xml-version" value="1.1" />
+					<!--<attribute name="http://saxon.sf.net/feature/initialTemplate" value="{http://www.w3.org/1999/XSL/Transform}initial-template" />-->
+					<!--
+					<attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener" />
+					-->
+					<!-- xsltSchemaAware available only in proprietary versions of Saxon (Professional/Enterprise) -->
+					<!--<attribute name="http://saxon.sf.net/feature/xsltSchemaAware" value="true" />
+					<attribute name="http://saxon.sf.net/feature/schema-validation-mode" value="strict" />
+					<attribute name="http://saxon.sf.net/feature/xsd-version" value="1.1" />
+					-->
+					<!--ignoreSAXSourceParser is necessary so parsers defined below are used
+        							            instead of ones passed by ant-->
+					<!--
+					<attribute name="http://saxon.sf.net/feature/ignoreSAXSourceParser" value="true" />
+					-->
+				</factory>
+			</xslt>
+		</sequential>
+	</macrodef>
+	
+	<macrodef name="json-xslt">
+			<!--<attribute name="basedir" />-->
+			<!--<attribute name="destdir" />-->
+			<attribute name="xsl" />
+			<attribute name="out" />
+			<attribute name="injsonfile" />
+			<sequential>
+				<xslt processor="trax" style="@{xsl}"  in="dummy.xml" out="@{out}" classpathref="lib.path.id">
+					<param name="inJsonFile" expression="@{injsonfile}" />
+					<factory name="net.sf.saxon.TransformerFactoryImpl">
+						<attribute name="http://saxon.sf.net/feature/xml-version" value="1.1" />
+						<!--<attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener" />-->
+						<!--<attribute name="http://saxon.sf.net/feature/suppressXsltNamespaceCheck" value="true" />-->
+						<!-- Although we are using the default name 'xsl:initial-template' for the initial template, it is not called unless we specify it below explicitly -->
+						<attribute name="http://saxon.sf.net/feature/initialTemplate" value="{http://www.w3.org/1999/XSL/Transform}initial-template" />
+					</factory>
+				</xslt>
+			</sequential>
+		</macrodef>
+
+	<target name="convert-xacml-policy-xml-to-json-and-back" description="Convert original XACML 3.0/XML conformance test-specific policy to JSON equivalent, then back to XML to verify equivalence">
+		<basename property="src.sub.dir.name" file="${src.sub.dir.path}" />
+		<property name="target.sub.dir.path" value="${target.dir}/${src.sub.dir.name}" />
+		<echo message="Converting XACML/XML policy file from directory '${src.sub.dir.path}' --> '${target.sub.dir.path}'" />
+		<mkdir dir="${target.sub.dir.path}" />
+		<!-- Convert Policy.xml. We want JSON schema validation (which is enabled unless the file is in a 'invalid' sub-folder). -->
+		<xml-xslt basedir="${src.sub.dir.path}" destdir="${target.sub.dir.path}" includes="Policy.xml" xsl="xacml-policy-xml-to-json.xsl" extension=".json" usejsonprofile="no" />	
+		<!-- For JSON transformation, JSON file cannot be passed as XSLT input (only XML accepted) but as a specific parameter, see the xacml-policy-json-to-xml.xsl for more info -->
+		<json-xslt injsonfile="${target.sub.dir.path}/Policy.json" xsl="xacml-policy-json-to-xml.xsl" out="${target.sub.dir.path}/Policy.xml" />
+	</target>
+
+	<!-- ================================= 
+          Main target
+         ================================= -->
+	<!--
+	<target name="upgrade" depends="install-ivy, generate-src" 
+            description=" resolve dependencies and run the project: upgrade">-->
+	<target name="convert-xacml-policies-xml-to-json-and-back" description=" --> resolve dependencies and run the project: authzforce-ce-xacml-json-model-convert-policies">
+		<echo message="using ivy to resolve dependencies..." />
+		<!--
+		http://www.codetab.org/apache-ivy-tutorial/apache-ivy-cachepath-and-retrieve/
+		Default ivy settings:  
+		ivy.project.dir = ${basedir}
+		ivy.lib.dir = ${ivy.project.dir}/lib
+		ivy.retrieve.pattern = ${ivy.lib.dir}/[artifact]-[revision].[ext]
+		
+		 ivy retrieve - default pattern = ${ivy.retrieve.pattern}
+    Sync set to true will ensure that any extra files in the lib directory is deleted.
+    Type set to jar tells ivy to copy only jar artifacts. Source and javadoc artifacts are ignored.
+		-->
+		<ivy:retrieve sync="true" type="jar,bundle" pathId="lib.path.id" />
+
+		<!-- inheritrefs="true" is required to pass ref 'lib.path.id' to task 'convert-xacml-policy-xml-to-json-and-back' -->
+		<ac:foreach target="convert-xacml-policy-xml-to-json-and-back" param="src.sub.dir.path" inheritall="true" inheritrefs="true">
+			<path>
+				<!-- includes parameter prevents recursive listing -->
+				<dirset dir="${src.dir}" includes="*" />
+			</path>
+		</ac:foreach>
+	</target>
+
+	<!-- ================================= 
+          target: clean-cache              
+         ================================= -->
+	<target name="clean-cache" description="--> clean the ivy cache">
+		<ivy:cleancache />
+	</target>
+</project>

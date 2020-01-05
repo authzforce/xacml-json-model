@@ -47,7 +47,7 @@
 
 				"Value": 
 				{
-					"$ref": "common.schema.json#/definitions/AttributeValueType"
+					"$ref": "common-std.schema.json#/definitions/AttributeValueType"
 				}
 			},
 
@@ -149,7 +149,7 @@
 					"type": "array",
 					"items": 
 					{
-						"$ref": "common.schema.json#/definitions/AttributeValueType"
+						"$ref": "common-std.schema.json#/definitions/AttributeValueType"
 					},
 
 					"minItems": 0
@@ -264,14 +264,14 @@
 					"oneOf": 
 					[
 						{
-							"$ref": "common.schema.json#/definitions/AttributeCategoryType"
+							"$ref": "common-std.schema.json#/definitions/AttributeCategoryType"
 						},
 
 						{
 							"type": "array",
 							"items": 
 							{
-								"$ref": "common.schema.json#/definitions/AttributeCategoryType"
+								"$ref": "common-std.schema.json#/definitions/AttributeCategoryType"
 							},
 
 							"minItems": 0
@@ -289,7 +289,7 @@
 							"type": "array",
 							"items": 
 							{
-								"$ref": "common.schema.json#/definitions/IdReferenceType"
+								"$ref": "common-std.schema.json#/definitions/IdReferenceType"
 							}
 						},
 
@@ -298,7 +298,7 @@
 							"type": "array",
 							"items": 
 							{
-								"$ref": "common.schema.json#/definitions/IdReferenceType"
+								"$ref": "common-std.schema.json#/definitions/IdReferenceType"
 							}
 						}
 					},

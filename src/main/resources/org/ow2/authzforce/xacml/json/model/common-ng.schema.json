@@ -1,0 +1,168 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema",
+	"$id": "http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-ng.schema.json",
+	"title": "Common JSON schema to Request and Response objects defined in JSON profile of XACML 3.0 v1.0",
+	"definitions": 
+	{
+		"AttributeValueType": 
+		{
+			"description": "Security warning: this definition allows any JSON object as value. TODO: find a way to validate it somehow. Possible solutions: 1) Modify this schema in production to restrict possible values as much as possible. 2) Any equivalent of XML processContents='strict'. 3) Any JSON processor that enforces a max text length, max number of keys, max object depth.",
+			"anyOf": 
+			[
+				{
+					"type": "boolean"
+				},
+
+				{
+					"type": "number"
+				},
+
+				{
+					"type": "string"
+				},
+
+				{
+					"type": "object"
+				},
+
+				{
+					"type": "array",
+					"items": 
+					{
+						"type": "boolean"
+					},
+
+					"minItems": 0
+				},
+
+				{
+					"type": "array",
+					"items": 
+					{
+						"type": ["string","number"]
+					},
+
+					"minItems": 0
+				},
+
+				{
+					"type": "array",
+					"items": 
+					{
+						"type": "object"
+					},
+
+					"minItems": 0
+				}
+			]
+		},
+
+		"AttributeType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"attrId": 
+				{
+					"type": "string",
+					"format": "uri-reference"
+				},
+
+				"issuer": 
+				{
+					"type": "string"
+				},
+
+				"includeInResult": 
+				{
+					"type": "boolean"
+				},
+
+				"dataType": 
+				{
+					"type": "string",
+					"format": "uri-reference"
+				},
+
+				"value": 
+				{
+					"$ref": "#/definitions/AttributeValueType"
+				}
+			},
+
+			"required": 
+			[
+				"attrId",
+				"value"
+			],
+
+			"additionalProperties": false
+		},
+
+		"AttributeCategoryType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"categoryId": 
+				{
+					"type": "string",
+					"format": "uri-reference"
+				},
+
+				"id": 
+				{
+					"type": "string"
+				},
+
+				"content": 
+				{
+					"type": "string"
+				},
+
+				"attr": 
+				{
+					"type": "array",
+					"items": 
+					{
+						"$ref": "#/definitions/AttributeType"
+					},
+
+					"minItems": 0
+				}
+			},
+
+			"required": 
+			[
+				"categoryId"
+			],
+
+			"additionalProperties": false
+		},
+		
+		"IdReferenceType": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"id": 
+				{
+					"type": "string",
+					"format": "uri-reference"
+				},
+
+				"version": 
+				{
+					"type": "string"
+				}
+			},
+
+			"required": 
+			[
+				"id"
+			],
+
+			"additionalProperties": false
+		}
+	}
+}

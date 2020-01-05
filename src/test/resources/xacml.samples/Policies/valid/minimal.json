@@ -1,6 +1,0 @@
-{
-	"policy": {
-		"id": "minimal",
-		"combiningAlgId": "urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit"
-	}
-}
