@@ -5,7 +5,7 @@ This project provides JSON schemas for validating XACML Requests/Responses accor
 - [Request.schema.json](src/main/resources/org/ow2/authzforce/xacml/json/model/Request.schema.json) for validating XACML/JSON Requests;
 - [Response.schema.json](src/main/resources/org/ow2/authzforce/xacml/json/model/Response.schema.json) for validating XACML/JSON Responses.
 
-The project also provides a [library](src/main/java/org/ow2/authzforce/xacml/json/model/Xacml3JsonUtils.java) for validating XACML Requests/Responses against these JSON schemas, as well as security constraints in order to mitigate JSON parsing Denial-of-Service attacks, e.g. such as string size, array size, number of keys, depth (see [LimitsCheckingJSONObject class](src/main/java/org/ow2/authzforce/xacml/json/model/LimitsCheckingJSONObject.java)).
+The project also provides a [library](src/main/java/org/ow2/authzforce/xacml/json/model/XacmlJsonUtils.java) for validating XACML Requests/Responses against both these JSON schemas and security constraints in order to mitigate JSON parsing Denial-of-Service attacks, e.g. such as string size, array size, number of keys, depth (see [LimitsCheckingJSONObject class](src/main/java/org/ow2/authzforce/xacml/json/model/LimitsCheckingJSONObject.java)).
 
 Check the [test classes](src/test/java) to find out usage examples.
 
@@ -14,7 +14,7 @@ Check the [test classes](src/test/java) to find out usage examples.
 Although the standard JSON Profile of XACML does not define a JSON format for XACML Policy(Set), this AuthzForce project defines such format in a JSON schema which can be used for validation:
 [Policy.schema.json](src/main/resources/org/ow2/authzforce/xacml/json/model/Policy.schema.json).
 
-There are a few high-level differences between this JSON schema and the standard XACMl/XML schema for Policies/PolicySets:
+There are a few high-level differences between this JSON schema and the standard XACML/XML schema for Policies/PolicySets:
 * A more generic Policy model: 
   * No distinction between Policy and PolicySet in JSON schema, so a Policy and PolicySet definitions are merged, and Policy may enclose Policies (like a PolicySet may enclose PolicySets)
   * Policy/Rule's Version is optional in JSON schema
@@ -26,9 +26,8 @@ There are a few high-level differences between this JSON schema and the standard
 * Several XACML/XML features are not translatable to JSON, or require a non-standard - possibly complex - convention or workaround to be translated to JSON, due to limitations of JSON, JSON Schema or of the implementation library (everit json-schema). See previous section in this document for more info.
 
 More info:
-http://json-schema.org/draft-06/json-schema-release-notes.html#q-what-happened-to-all-the-discussions-around-re-using-schemas-with-additionalproperties
-https://github.com/everit-org/json-schema/issues/184#issuecomment-393419878
-Should be fixed in next draft 08: https://github.com/json-schema-org/json-schema-org.github.io/issues/77
+- http://json-schema.org/draft-06/json-schema-release-notes.html#q-what-happened-to-all-the-discussions-around-re-using-schemas-with-additionalproperties
+- https://github.com/everit-org/json-schema/issues/184#issuecomment-393419878, should be fixed in next draft 08: https://github.com/json-schema-org/json-schema-org.github.io/issues/77
 
 # XACML/XML - XACML/JSON conversion
 
@@ -38,8 +37,8 @@ Before we present the various utilities for XACML/XML to XACML/JSON conversion, 
 - No comments (like XML comments).
 - No support for (object-oriented) inheritance/extension/polymorphism (may be used in AttributeValues): https://github.com/json-schema-org/json-schema-spec/issues/348
 - Much fewer built-in types, e.g. no date/time type: https://github.com/json-schema-org/json-schema-spec/issues/199
-- Other issues considered for JSON schema draft 7 (current version is draft 6):
-https://github.com/json-schema-org/json-schema-spec/milestone/5
+- Other issues considered for next JSON schema drafts:
+https://github.com/json-schema-org/json-schema-spec/milestones
 
 ## Converting XACML/XML Requests/Responses to JSON
 This project provides XSLT stylesheets for XACML/XML Requests (and Responses) to XACML/JSON conversion according to JSON Profile of XACML:
