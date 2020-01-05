@@ -80,7 +80,7 @@
 					"type": "array",
 					"items": 
 					{
-						"$ref": "common.schema.json#/definitions/AttributeCategoryType"
+						"$ref": "common-std.schema.json#/definitions/AttributeCategoryType"
 					},
 
 					"minItems": 1

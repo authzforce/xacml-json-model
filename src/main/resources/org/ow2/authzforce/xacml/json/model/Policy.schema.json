@@ -4,11 +4,11 @@
 	"title": "JSON schema of a policy object equivalent to XACML 3.0 Policy(Set)",
 	"definitions": {
 		"VariableReference": {
-			"description": "Referenced variable ID, must be defined in a VariableDefinition element of an enclosing policy/rule",
+			"description": "XACML VariableReference, i.e. reference to variable defined in a VariableDefinition element of an enclosing policy/rule",
 			"type": "string"
 		},
 		"Function": {
-			"description": "Function ID",
+			"description": "Function ID as instance of ExpressionType",
 			"type": "string",
 			"format": "uri-reference"
 		},
@@ -19,7 +19,7 @@
 					"type": "string",
 					"format": "uri-reference"
 				},
-				"id": {
+				"attrId": {
 					"type": "string",
 					"format": "uri-reference"
 				},
@@ -36,7 +36,7 @@
 			},
 			"required": [
 				"category",
-				"id",
+				"attrId",
 				"dataType",
 				"mustBePresent"
 			],
@@ -75,14 +75,14 @@
 		"Apply": {
 			"type": "object",
 			"properties": {
-				"description": {
+				"desc": {
 					"type": "string"
 				},
-				"functionId": {
+				"funcId": {
 					"type": "string",
 					"format": "uri-reference"
 				},
-				"argExpressions": {
+				"argExprs": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/Expression"
@@ -91,88 +91,86 @@
 				}
 			},
 			"required": [
-				"functionId",
-				"argExpressions"
+				"funcId",
+				"argExprs"
 			],
 			"additionalProperties": false
 		},
-		
 		"ValueRefExpression": {
-		"$comment": "Abstract type, do not set 'additionalProperties: false' or non-empty 'required' property array here, but in concrete subtypes",
+			"$comment": "Abstract type, do not set 'additionalProperties: false' or non-empty 'required' property array here, but in concrete subtypes",
 			"oneOf": [
 				{
 					"type": "object",
 					"properties": {
-						"attributeDesignator": {
+						"attrDesignator": {
 							"$ref": "#/definitions/AttributeDesignator"
 						}
 					},
 					"required": [
-						"attributeDesignator"
+						"attrDesignator"
 					]
 				},
 				{
 					"type": "object",
 					"properties": {
-						"attributeSelector": {
+						"attrSelector": {
 							"$ref": "#/definitions/AttributeSelector"
 						}
 					},
 					"required": [
-						"attributeSelector"
+						"attrSelector"
 					]
 				},
 				{
-					"type": "object",
+					"type": "string",
 					"properties": {
-						"variableRef": {
+						"varRef": {
 							"$ref": "#/definitions/VariableReference"
 						}
 					},
 					"required": [
-						"variableRef"
+						"varRef"
 					]
 				}
 			]
 		},
-		
 		"Expression": {
 			"$comment": "Abstract type, do not set 'additionalProperties: false' here but in concrete subtypes",
 			"oneOf": [
 				{
 					"type": "object",
 					"properties": {
-						"attributeValue": {
-							"$ref": "common.schema.json#/definitions/AttributeValueType"
+						"const": {
+							"$ref": "common-ng.schema.json#/definitions/AttributeValueType"
 						}
 					},
 					"required": [
-						"attributeValue"
+						"const"
 					]
 				},
 				{
 					"$ref": "#/definitions/ValueRefExpression"
 				},
 				{
-					"type": "object",
+					"type": "string",
 					"properties": {
-						"function": {
+						"func": {
 							"$ref": "#/definitions/Function"
 						}
 					},
 					"required": [
-						"function"
+						"func"
 					]
 				},
 				{
 					"type": "object",
 					"properties": {
-						"apply": {
+						"funcCall": {
 							"$ref": "#/definitions/Apply"
 						}
 					},
 					"required": [
-						"apply"
+						"funcCall"
 					]
 				}
 			]
@@ -180,40 +178,53 @@
 		"VariableDefinition": {
 			"type": "object",
 			"allOf": [
-			{
-				"properties": {
-					"id": {
-						"type": "string"
-					}
+				{
+					"properties": {
+						"id": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"id"
+					]
 				},
-				"required": [
-					"id"
-				]
-			},
-			{
-				"$ref": "#/definitions/Expression"
-			},
-			{
+				{
+					"$ref": "#/definitions/Expression"
+				},
+				{
 					"$comment": "this replaces additionalProperties=false which does not work as expected with allOf: https://github.com/json-schema-org/json-schema-org.github.io/issues/77",
-					"propertyNames": {"enum": ["id", "attributeValue", "attributeDesignator", "attributeSelector", "variableRef", "function", "apply"]}
-			}				
+					"propertyNames": {
+						"enum": [
+							"id",
+							"typedValue",
+							"attrDesignator",
+							"attrSelector",
+							"varRef",
+							"func",
+							"funcCall"
+						]
+					}
+				}
 			],
 			"additionalProperties": false
 		},
 		"Match": {
-
 			"description": "FIXME: simplify this schema with allOf when the following bug is fixed: https://github.com/everit-org/json-schema/issues/184#issuecomment-393419878",
-						"type": "object",
+			"type": "object",
 			"allOf": [
 				{
 					"properties": {
-						"matchFunction": { "type": "string", "format": "uri-reference" },
-						"value": {
-							"$ref": "common.schema.json#/definitions/AttributeValueType"
+						"matchFunc": {
+							"type": "string",
+							"format": "uri-reference"
+						},
+						"matchedValue": {
+							"$ref": "common-ng.schema.json#/definitions/AttributeValueType"
 						}
 					},
 					"required": [
-						"matchFunction","value"
+						"matchFunc",
+						"matchedValue"
 					]
 				},
 				{
@@ -221,7 +232,15 @@
 				},
 				{
 					"$comment": "this replaces additionalProperties=false which does not work as expected with allOf: https://github.com/json-schema-org/json-schema-org.github.io/issues/77",
-					"propertyNames": {"enum": ["matchFunction", "value", "attributeDesignator", "attributeSelector", "variableRef"]}
+					"propertyNames": {
+						"enum": [
+							"matchFunc",
+							"matchedValue",
+							"attrDesignator",
+							"attrSelector",
+							"varRef"
+						]
+					}
 				}
 			]
 		},
@@ -251,7 +270,7 @@
 			"allOf": [
 				{
 					"properties": {
-						"attributeId": {
+						"attrId": {
 							"type": "string",
 							"format": "uri-reference"
 						},
@@ -261,18 +280,32 @@
 						},
 						"issuer": {
 							"type": "string"
+						},
+						"expr": {
+							"$ref": "#/definitions/Expression"
 						}
 					},
 					"required": [
-						"attributeId"
+						"attrId",
+						"expr"
 					]
 				},
 				{
-					"$ref": "#/definitions/Expression"
-				},
-				{
 					"$comment": "this replaces additionalProperties=false which does not work as expected with allOf: https://github.com/json-schema-org/json-schema-org.github.io/issues/77",
-					"propertyNames": {"enum": ["attributeId", "category", "issuer", "attributeValue", "attributeDesignator", "attributeSelector", "variableRef", "function", "apply"]}
+					"propertyNames": {
+						"enum": [
+							"attrId",
+							"category",
+							"issuer",
+							"typedValue",
+							"attrDesignator",
+							"attrSelector",
+							"varRef",
+							"func",
+							"funcCall",
+							"expr"
+						]
+					}
 				}
 			]
 		},
@@ -306,7 +339,7 @@
 				"required": {
 					"type": "boolean"
 				},
-				"attributeAssignmentExpressions": {
+				"attrAssignmentExprs": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/AttributeAssignmentExpression"
@@ -331,7 +364,7 @@
 				"version": {
 					"$ref": "#/definitions/Version"
 				},
-				"description": {
+				"desc": {
 					"type": "string"
 				},
 				"defaults": {
@@ -347,21 +380,25 @@
 					],
 					"additionalProperties": false
 				},
-				"variableDefs": {
+				"target": {
+					"$ref": "#/definitions/Target"
+				},
+				"vars": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/VariableDefinition"
 					},
 					"minItems": 0
 				},
-				"target": {
-					"$ref": "#/definitions/Target"
-				},
 				"condition": {
 					"$ref": "#/definitions/Expression"
 				},
-				"pepActionExpressions": {
-					"$ref": "#/definitions/PepActionExpression"
+				"pepActionExprs": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/PepActionExpression"
+					},
+					"minItems": 0
 				}
 			},
 			"required": [
@@ -387,36 +424,48 @@
 				},
 				{
 					"$comment": "this replaces additionalProperties=false which does not work as expected with allOf: https://github.com/json-schema-org/json-schema-org.github.io/issues/77",
-					"propertyNames": {"enum": ["id", "version", "description", "defaults", "variableDefs", "target", "condition", "pepActionExpressions", "effect"]}
+					"propertyNames": {
+						"enum": [
+							"id",
+							"version",
+							"desc",
+							"defaults",
+							"target",
+							"condition",
+							"pepActionExprs",
+							"effect",
+							"vars"
+						]
+					}
 				}
 			]
 		},
-		"CombiningAlgArg": {
+		"CombinerParameterAssignment": {
 			"type": "object",
 			"properties": {
-				"name": {
+				"paramName": {
 					"type": "string"
 				},
 				"value": {
-					"$ref": "common.schema.json#/definitions/AttributeValueType"
+					"$ref": "common-ng.schema.json#/definitions/AttributeValueType"
 				}
 			},
 			"required": [
-				"name",
+				"paramName",
 				"value"
 			],
 			"additionalProperties": false
 		},
-		"CombiningAlgArgList": {
+		"SequenceOfConstantCombinerArgs": {
 			"type": "object",
 			"properties": {
-				"decisionElementRef": {
+				"combinedRef": {
 					"type": "string"
 				},
-				"args": {
+				"paramAssignments": {
 					"type": "array",
 					"items": {
-						"$ref": "#/definitions/CombiningAlgArg"
+						"$ref": "#/definitions/CombinerParameterAssignment"
 					},
 					"minItems": 0
 				}
@@ -459,54 +508,66 @@
 						"issuer": {
 							"type": "object",
 							"properties": {
-								"attributes": {
+								"attrs": {
 									"type": "array",
 									"items": {
-										"$ref": "common.schema.json#/definitions/AttributeType"
+										"$ref": "common-ng.schema.json#/definitions/AttributeType"
 									},
 									"minItems": 0
 								}
 							}
 						},
-						"combiningAlgId": {
+						"combinerId": {
 							"type": "string",
 							"format": "uri-reference"
 						},
-						"rules": {
+						"combinerArgs": {
 							"type": "array",
 							"items": {
-								"$ref": "#/definitions/Rule"
-							},
-							"minItems": 0
-						},
-						"policies": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/ChildPolicy"
-							},
-							"minItems": 0
-						},
-						"otherCombiningAlgArgs": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/CombiningAlgArgList"
+								"$ref": "#/definitions/CombinerArg"
 							},
 							"minItems": 0
 						}
 					},
 					"required": [
-						"combiningAlgId"
+						"combinerId"
 					]
 				},
 				{
 					"$comment": "this replaces additionalProperties=false which does not work with allOf as expected: https://github.com/json-schema-org/json-schema-org.github.io/issues/77",
-					"propertyNames": {"enum": ["id", "version", "description", "issuer", "maxDelegationDepth", "defaults", "variableDefs", "target","condition", "pepActionExpressions", "combiningAlgId", "rules", "policies", "otherCombiningAlgArgs"]}
-				}				
+					"propertyNames": {
+						"enum": [
+							"id",
+							"version",
+							"desc",
+							"issuer",
+							"maxDelegationDepth",
+							"defaults",
+							"target",
+							"condition",
+							"pepActionExprs",
+							"combinerId",
+							"vars",
+							"combinerArgs"
+						]
+					}
+				}
 			]
 		},
-		"ChildPolicy": {
-			"$comment":"Type is used as (abstract) parent type to Policy and PolicyRef, so no 'additionalProperties: false' to allow extensions by subtypes",
+		"CombinerArg": {
+			"$comment": "Type is used as (abstract) parent type to all kinds of Combining Algorithm arguments (Policy, Policy reference, Rule...), so no 'additionalProperties: false' to allow extensions by subtypes",
 			"oneOf": [
+				{
+					"type": "object",
+					"properties": {
+						"rule": {
+							"$ref": "#/definitions/Rule"
+						}
+					},
+					"required": [
+						"rule"
+					]
+				},
 				{
 					"type": "object",
 					"properties": {
@@ -527,6 +588,17 @@
 					},
 					"required": [
 						"policyRef"
+					]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"constArgSeq": {
+							"$ref": "#/definitions/SequenceOfConstantCombinerArgs"
+						}
+					},
+					"required": [
+						"constArgSeq"
 					]
 				}
 			]

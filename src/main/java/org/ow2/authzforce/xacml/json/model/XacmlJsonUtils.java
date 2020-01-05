@@ -1,5 +1,5 @@
 /**
- * Copyright 2012-2019 THALES.
+ * Copyright 2012-2020 THALES.
  *
  * This file is part of AuthzForce CE.
  *
@@ -49,7 +49,7 @@ public final class XacmlJsonUtils
 	 * JSON schema for validating Responses according to JSON Profile of XACML 3.0
 	 */
 	public static final Schema RESPONSE_SCHEMA;
-	
+
 	/**
 	 * JSON schema for validating Policies according to AuthzForce/JSON policy format for XACML Policy(Set) (see Policy.schema.json)
 	 */
@@ -57,8 +57,9 @@ public final class XacmlJsonUtils
 
 	static
 	{
-		final SchemaClient schemaClient = new SpringBasedJsonSchemaClient(ImmutableMap.of("http://authzforce.github.io/xacml-json-profile-model/schemas/1/common.schema.json",
-				"classpath:org/ow2/authzforce/xacml/json/model/common.schema.json"));
+		final SchemaClient schemaClient = new SpringBasedJsonSchemaClient(
+		        ImmutableMap.of("http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-std.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-std.schema.json",
+		                "http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-ng.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-ng.schema.json"));
 		try (InputStream inputStream = SpringBasedJsonSchemaClient.class.getResourceAsStream("Request.schema.json"))
 		{
 			final JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
@@ -79,7 +80,7 @@ public final class XacmlJsonUtils
 		{
 			throw new RuntimeException(e);
 		}
-		
+
 		try (InputStream inputStream = SpringBasedJsonSchemaClient.class.getResourceAsStream("Policy.schema.json"))
 		{
 			final JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
@@ -132,10 +133,33 @@ public final class XacmlJsonUtils
 			}
 
 			// remove empty Category array if any
-			final JSONArray jsonArray = resultJsonObj.optJSONArray("Category");
-			if (jsonArray != null && jsonArray.length() == 0)
+			final JSONArray jsonArrayOfAttCats = resultJsonObj.optJSONArray("Category");
+			if (jsonArrayOfAttCats != null)
 			{
-				resultJsonObj.remove("Category");
+				if (jsonArrayOfAttCats.length() == 0)
+				{
+					resultJsonObj.remove("Category");
+				}
+				else
+				{
+					/*
+					 * Remove any IncludeInResult property which is useless and optional in XACML/JSON. (NB.: IncludeInResult is mandatory in XACML/XML schema but optional in JSON Profile).
+					 */
+					for (final Object attCatJson : jsonArrayOfAttCats)
+					{
+						assert attCatJson instanceof JSONObject;
+						final JSONObject attCatJsonObj = (JSONObject) attCatJson;
+						final JSONArray jsonArrayOfAtts = attCatJsonObj.optJSONArray("Attribute");
+						if (jsonArrayOfAtts != null)
+						{
+							jsonArrayOfAtts.forEach(attJson -> {
+								assert attJson instanceof JSONObject;
+								final JSONObject attJsonObj = (JSONObject) attJson;
+								attJsonObj.remove("IncludeInResult");
+							});
+						}
+					}
+				}
 			}
 		}
 
