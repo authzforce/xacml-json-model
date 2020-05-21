@@ -1,6 +1,15 @@
 # Change log
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
+
+## 2.3.0
+### Changed
+- Upgraded parent project version: 7.6.0
+  - Upgraded dependencies:
+  	- spring-core: 5.1.14
+  	- org.everit.json.schema: 1.12.1
+
+
 ## 2.2.0
 ### Added
 - JSON schema for XACML Policy(Set)
