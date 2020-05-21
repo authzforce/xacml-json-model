@@ -19,6 +19,8 @@ package org.ow2.authzforce.xacml.json.model;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaClient;
@@ -26,8 +28,6 @@ import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Instances of JSON schema as defined by JSON Profile of XACML 3.0
@@ -57,9 +57,10 @@ public final class XacmlJsonUtils
 
 	static
 	{
-		final SchemaClient schemaClient = new SpringBasedJsonSchemaClient(
-		        ImmutableMap.of("http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-std.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-std.schema.json",
-		                "http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-ng.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-ng.schema.json"));
+		final Map<String, String> mutableCatalogMap = new HashMap<>();
+		mutableCatalogMap.put("http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-std.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-std.schema.json");
+		mutableCatalogMap.put("http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-ng.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-ng.schema.json");
+		final SchemaClient schemaClient = new SpringBasedJsonSchemaClient(mutableCatalogMap);
 		try (InputStream inputStream = SpringBasedJsonSchemaClient.class.getResourceAsStream("Request.schema.json"))
 		{
 			final JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
