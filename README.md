@@ -23,7 +23,7 @@ There are a few high-level differences between this JSON schema and the standard
 * Type PepActionExpression replaces Obligation/Advice with a boolean property "required" to make the difference (=true for Obligation, =false for Advice)
 * DataType defined at Attribute level, not AttributeValue level, like in standard XACML/JSON Profile
 * Apply must have at least one arg to the function
-* Several XACML/XML features are not translatable to JSON, or require a non-standard - possibly complex - convention or workaround to be translated to JSON, due to limitations of JSON, JSON Schema or of the implementation library (everit json-schema). See previous section in this document for more info.
+* Several XACML/XML features are not translatable to JSON, or require a non-standard - possibly complex - convention or workaround to be translated to JSON, due to limitations of JSON, JSON Schema or of the implementation library (everit json-schema). See next section in this document for more info.
 
 More info:
 - http://json-schema.org/draft-06/json-schema-release-notes.html#q-what-happened-to-all-the-discussions-around-re-using-schemas-with-additionalproperties
