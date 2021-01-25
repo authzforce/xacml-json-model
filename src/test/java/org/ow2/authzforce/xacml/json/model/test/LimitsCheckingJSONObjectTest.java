@@ -1,5 +1,5 @@
 /**
- * Copyright 2012-2020 THALES.
+ * Copyright 2012-2021 THALES.
  *
  * This file is part of AuthzForce CE.
  *
@@ -17,12 +17,10 @@
  */
 package org.ow2.authzforce.xacml.json.model.test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -86,11 +84,11 @@ public class LimitsCheckingJSONObjectTest
 		/*
 		 * Read properly as UTF-8 to avoid character decoding issues with org.json API
 		 */
-		try (final InputStream in = new FileInputStream(xacmlJsonFile))
+		try (final BufferedReader fileReader = Files.newBufferedReader(xacmlJsonFile.toPath(), StandardCharsets.UTF_8))
 		{
 			try
 			{
-				final JSONObject json = new LimitsCheckingJSONObject(in, MAX_JSON_STRING_LENGTH, MAX_JSON_CHILDREN_COUNT, MAX_JSON_DEPTH);
+				final JSONObject json = new LimitsCheckingJSONObject(fileReader, MAX_JSON_STRING_LENGTH, MAX_JSON_CHILDREN_COUNT, MAX_JSON_DEPTH);
 				if (!expectedValid)
 				{
 					Assert.fail("Validation against JSON schema succeeded but expected to fail.  JSON = " + json);
