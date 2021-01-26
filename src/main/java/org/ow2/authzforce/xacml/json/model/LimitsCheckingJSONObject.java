@@ -1,5 +1,5 @@
 /**
- * Copyright 2012-2020 THALES.
+ * Copyright 2012-2021 THALES.
  *
  * This file is part of AuthzForce CE.
  *
@@ -17,14 +17,13 @@
  */
 package org.ow2.authzforce.xacml.json.model;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * {@link JSONObject} that complies with limits in terms of value length, depth and number of elements.
@@ -69,24 +68,6 @@ public final class LimitsCheckingJSONObject extends JSONObject
 			this.maxJsonStringLength = maxJsonStringLength;
 			this.maxNumOfKeysOrArrayItems = maxNumOfImmediateChildren;
 			this.maxDepth = maxDepth;
-		}
-
-		/**
-		 * Constructs from an {@link InputStream}
-		 * 
-		 * @param inputStream
-		 *            the source
-		 * 
-		 * @param maxJsonStringLength
-		 *            allowed maximum length of JSON keys and string values
-		 * @param maxNumOfImmediateChildren
-		 *            allowed maximum number of keys (therefore key-value pairs) in JSON object, or items in JSON array
-		 * @param maxDepth
-		 *            allowed maximum depth of JSON object
-		 */
-		private LimitsCheckingJSONTokener(final InputStream inputStream, final int maxJsonStringLength, final int maxNumOfImmediateChildren, final int maxDepth)
-		{
-			this(new InputStreamReader(inputStream), maxJsonStringLength, maxNumOfImmediateChildren, maxDepth);
 		}
 
 		/*
@@ -313,27 +294,9 @@ public final class LimitsCheckingJSONObject extends JSONObject
 	}
 
 	/**
-	 * Constructs from a {@link Reader}
-	 * 
-	 * @param reader
-	 *            a reader
-	 * 
-	 * @param maxJsonStringLength
-	 *            allowed maximum size of JSON keys and string values
-	 * @param maxNumOfImmediateChildren
-	 *            allowed maximum number of keys (therefore key-value pairs) in JSON object, or items in JSON array
-	 * @param maxDepth
-	 *            allowed maximum depth of JSON object
-	 */
-	public LimitsCheckingJSONObject(final Reader reader, final int maxJsonStringLength, final int maxNumOfImmediateChildren, final int maxDepth)
-	{
-		this(new LimitsCheckingJSONTokener(reader, maxJsonStringLength, maxNumOfImmediateChildren, maxDepth));
-	}
-
-	/**
 	 * Constructs from an {@link InputStream}
 	 * 
-	 * @param inputStream
+	 * @param reader
 	 *            the source
 	 * 
 	 * @param maxJsonStringLength
@@ -343,8 +306,8 @@ public final class LimitsCheckingJSONObject extends JSONObject
 	 * @param maxDepth
 	 *            allowed maximum depth of JSON object
 	 */
-	public LimitsCheckingJSONObject(final InputStream inputStream, final int maxJsonStringLength, final int maxNumOfImmediateChildren, final int maxDepth)
+	public LimitsCheckingJSONObject(final Reader reader, final int maxJsonStringLength, final int maxNumOfImmediateChildren, final int maxDepth)
 	{
-		this(new LimitsCheckingJSONTokener(inputStream, maxJsonStringLength, maxNumOfImmediateChildren, maxDepth));
+		this(new LimitsCheckingJSONTokener(reader, maxJsonStringLength, maxNumOfImmediateChildren, maxDepth));
 	}
 }

@@ -11,4 +11,8 @@
    -->
     <Bug pattern="CRLF_INJECTION_LOGS" />
   </Match>
+  <Match>
+    <Class name="org.ow2.authzforce.xacml.json.model.SpringBasedJsonSchemaClient"/>
+    <Bug pattern="URLCONNECTION_SSRF_FD" />
+  </Match>
 </FindBugsFilter>

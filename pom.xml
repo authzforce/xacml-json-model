@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>org.ow2.authzforce</groupId>
 		<artifactId>authzforce-ce-parent</artifactId>
-		<version>7.6.0</version>
+		<version>8.0.0</version>
 	</parent>
 	<artifactId>authzforce-ce-xacml-json-model</artifactId>
 	<packaging>jar</packaging>
-	<version>2.3.0</version>
+	<version>3.0.0</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>AuthzForce - Data model for JSON Profile of XACML 3.0</description>
 	<url>${project.url}</url>
@@ -49,6 +49,11 @@
 		<dependency>
 			<groupId>org.ow2.authzforce</groupId>
 			<artifactId>authzforce-ce-xacml-model</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -93,12 +98,8 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<configuration>
-					<onlyAnalyze>org.ow2.authzforce.*</onlyAnalyze>
-					<excludeFilterFile>findbugs-exclude-filter.xml</excludeFilterFile>
-				</configuration>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<phase>verify</phase>

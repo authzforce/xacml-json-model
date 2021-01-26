@@ -1,7 +1,7 @@
 [![Javadocs](http://javadoc.io/badge/org.ow2.authzforce/authzforce-ce-xacml-json-model.svg)](http://javadoc.io/doc/org.ow2.authzforce/authzforce-ce-xacml-json-model)
 
 # XACML/JSON Request and Response JSON schema (XACML/JSON Profile standard) and validation
-This project provides JSON schemas for validating XACML Requests/Responses according to JSON Profile of XACMl 3.0:
+This project provides JSON schemas for validating XACML Requests/Responses according to JSON Profile of XACML 3.0:
 - [Request.schema.json](src/main/resources/org/ow2/authzforce/xacml/json/model/Request.schema.json) for validating XACML/JSON Requests;
 - [Response.schema.json](src/main/resources/org/ow2/authzforce/xacml/json/model/Response.schema.json) for validating XACML/JSON Responses.
 
@@ -23,7 +23,7 @@ There are a few high-level differences between this JSON schema and the standard
 * Type PepActionExpression replaces Obligation/Advice with a boolean property "required" to make the difference (=true for Obligation, =false for Advice)
 * DataType defined at Attribute level, not AttributeValue level, like in standard XACML/JSON Profile
 * Apply must have at least one arg to the function
-* Several XACML/XML features are not translatable to JSON, or require a non-standard - possibly complex - convention or workaround to be translated to JSON, due to limitations of JSON, JSON Schema or of the implementation library (everit json-schema). See previous section in this document for more info.
+* Several XACML/XML features are not translatable to JSON, or require a non-standard - possibly complex - convention or workaround to be translated to JSON, due to limitations of JSON, JSON Schema or of the implementation library (everit json-schema). See next section in this document for more info.
 
 More info:
 - http://json-schema.org/draft-06/json-schema-release-notes.html#q-what-happened-to-all-the-discussions-around-re-using-schemas-with-additionalproperties

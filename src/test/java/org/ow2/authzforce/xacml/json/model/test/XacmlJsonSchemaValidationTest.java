@@ -1,5 +1,5 @@
 /**
- * Copyright 2012-2020 THALES.
+ * Copyright 2012-2021 THALES.
  *
  * This file is part of AuthzForce CE.
  *
@@ -127,7 +127,7 @@ public class XacmlJsonSchemaValidationTest
 		/*
 		 * Read properly as UTF-8 to avoid character decoding issues with org.json API
 		 */
-		try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(xacmlJsonFile), StandardCharsets.UTF_8)))
+		try (final BufferedReader reader = Files.newBufferedReader(xacmlJsonFile.toPath(), StandardCharsets.UTF_8))
 		{
 			final JSONObject json = new LimitsCheckingJSONObject(reader, MAX_JSON_STRING_LENGTH, MAX_JSON_CHILDREN_COUNT, MAX_JSON_DEPTH);
 			final Schema schema;
