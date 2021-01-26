@@ -2,6 +2,13 @@
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
 
+## 3.0.0
+### Changed
+- Upgraded parent project version: 8.0.0
+- Upgraded to Java 11 (Java 8 no longer supported)
+- Upgraded spring-core: 5.2.10
+
+
 ## 2.3.0
 ### Changed
 - Upgraded parent project version: 7.6.0
