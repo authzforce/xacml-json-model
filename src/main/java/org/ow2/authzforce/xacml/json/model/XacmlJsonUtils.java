@@ -58,8 +58,8 @@ public final class XacmlJsonUtils
 	static
 	{
 		final Map<String, String> mutableCatalogMap = new HashMap<>();
-		mutableCatalogMap.put("http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-std.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-std.schema.json");
-		mutableCatalogMap.put("http://authzforce.github.io/xacml-json-profile-model/schemas/1/common-ng.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-ng.schema.json");
+		mutableCatalogMap.put("https://raw.githubusercontent.com/authzforce/xacml-json-model/master/src/main/resources/org/ow2/authzforce/xacml/json/model/common-std.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-std.schema.json");
+		mutableCatalogMap.put("https://raw.githubusercontent.com/authzforce/xacml-json-model/master/src/main/resources/org/ow2/authzforce/xacml/json/model/common-ng.schema.json", "classpath:org/ow2/authzforce/xacml/json/model/common-ng.schema.json");
 		final SchemaClient schemaClient = new SpringBasedJsonSchemaClient(mutableCatalogMap);
 		try (InputStream inputStream = SpringBasedJsonSchemaClient.class.getResourceAsStream("Request.schema.json"))
 		{
@@ -75,7 +75,7 @@ public final class XacmlJsonUtils
 		try (InputStream inputStream = SpringBasedJsonSchemaClient.class.getResourceAsStream("Response.schema.json"))
 		{
 			final JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
-			RESPONSE_SCHEMA = SchemaLoader.load(rawSchema, schemaClient);
+			RESPONSE_SCHEMA = SchemaLoader.load(rawSchema/*, schemaClient*/);
 		}
 		catch (final IOException e)
 		{
@@ -85,7 +85,7 @@ public final class XacmlJsonUtils
 		try (InputStream inputStream = SpringBasedJsonSchemaClient.class.getResourceAsStream("Policy.schema.json"))
 		{
 			final JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
-			POLICY_SCHEMA = SchemaLoader.load(rawSchema, schemaClient);
+			POLICY_SCHEMA = SchemaLoader.load(rawSchema/*, schemaClient*/);
 		}
 		catch (final IOException e)
 		{
