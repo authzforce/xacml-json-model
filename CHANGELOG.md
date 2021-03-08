@@ -2,6 +2,12 @@
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
 
+## 3.0.1
+### Fixed
+- JSON schema identifiers in XACML/JSON schemas: updated to valid links on github
+- XacmlJsonUtils#canonicalizeResponse() to better identify similar XACML/JSON responses
+
+
 ## 3.0.0
 ### Changed
 - Upgraded parent project version: 8.0.0
