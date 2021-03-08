@@ -2,6 +2,11 @@
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
 
+## 3.0.2
+### Fixed
+- Backward compatibility on XacmlJsonUtils#canonicalizeResponse(), i.e. avoid breaking compatibility for reverse dependencies
+
+
 ## 3.0.1
 ### Fixed
 - JSON schema identifiers in XACML/JSON schemas: updated to valid links on github
