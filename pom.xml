@@ -7,7 +7,7 @@
 	</parent>
 	<artifactId>authzforce-ce-xacml-json-model</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>AuthzForce - Data model for JSON Profile of XACML 3.0</description>
 	<url>${project.url}</url>
@@ -114,6 +114,9 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<header>LICENSE_HEADER.txt</header>
+					<headerDefinitions>
+						<headerDefinition>LICENSE_HEADER_DEFS.xml</headerDefinition>
+					</headerDefinitions>
 					<includes>
 						<include>src/main/java/org/ow2/authzforce/**</include>
 						<!-- Include test files also -->

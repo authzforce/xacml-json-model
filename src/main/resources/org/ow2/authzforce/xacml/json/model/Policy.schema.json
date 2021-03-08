@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema",
-	"$id": "http://authzforce.github.io/xacml-json-profile-model/schemas/1/Policy.schema.json",
+	"$id": "https://raw.githubusercontent.com/authzforce/xacml-json-model/master/src/main/resources/org/ow2/authzforce/xacml/json/model/Policy.schema.json",
 	"title": "JSON schema of a policy object equivalent to XACML 3.0 Policy(Set)",
 	"definitions": {
 		"VariableReference": {

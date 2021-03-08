@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2012-2021 THALES.
  *
  * This file is part of AuthzForce CE.
@@ -17,25 +17,6 @@
  */
 package org.ow2.authzforce.xacml.json.model.test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import javax.xml.bind.JAXBException;
-
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.json.JSONObject;
@@ -48,6 +29,21 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import javax.xml.bind.JAXBException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class XacmlJsonSchemaValidationTest
 {
@@ -79,11 +75,9 @@ public class XacmlJsonSchemaValidationTest
 	 * 
 	 * 
 	 * @return iterator over test data
-	 * @throws URISyntaxException
-	 * @throws IOException
 	 */
 	@DataProvider(name = "xacmlJsonDataProvider")
-	public Iterator<Object[]> createData() throws URISyntaxException, IOException
+	public Iterator<Object[]> createData()
 	{
 		final List<Entry<File, File>> testDataDirLocations = Arrays.stream(SRC_XACML_JSON_DATA_DIRECTORY_LOCATIONS).map(loc -> new AbstractMap.SimpleImmutableEntry<>(new File(loc), (File) null))
 		        .collect(Collectors.toList());
@@ -93,7 +87,7 @@ public class XacmlJsonSchemaValidationTest
 			try
 			{
 				final int testDataParentDirIndex = i;
-				Files.newDirectoryStream(Paths.get(loc)).forEach(testDataDirPath -> testDataDirLocations.add(new AbstractMap.SimpleImmutableEntry(testDataDirPath.toFile(),
+				Files.newDirectoryStream(Paths.get(loc)).forEach(testDataDirPath -> testDataDirLocations.add(new AbstractMap.SimpleImmutableEntry<>(testDataDirPath.toFile(),
 				        new File(SRC_XACML_XML_CONFORMANCE_TEST_DATA_PARENT_DIRECTORY_LOCATIONS[testDataParentDirIndex], testDataDirPath.getFileName().toString()))));
 				i++;
 			}
@@ -103,26 +97,25 @@ public class XacmlJsonSchemaValidationTest
 			}
 		}
 
-		final Iterator<Object[]> testData = TestDataProvider.createData(testDataDirLocations);
-		return testData;
+		return TestDataProvider.createData(testDataDirLocations);
 	}
 
-	@Test(dataProvider = "xacmlJsonDataProvider")
 	/**
 	 * 
-	 * @param xacmlJsonFile
-	 * @param expectedXacmlXmlFile
+	 * @param xacmlJsonFile XACML/JSON file
+	 * @param expectedXacmlXmlFile expected XACML/XML file from conversion of {@code xacmlJsonFile}
 	 * @param expectedValid
 	 *            true iff validation against JSON schema should succeed
-	 * @param xacmlXmlFile
+	 * @param actualXacmlXmlFile
 	 *            XACML/XML file generated from {@code expectedXacmlXmlFile} by XSLT (during maven generate-test-resources phase) for XACML/XML->XACML/JSON conversion, then XSLT for XACML/JSON ->
 	 *            XACML/XML conversion back; may be null if no XACML/XML file exists (expected to have been converted from {@code xacmlJsonFile}, therefore should be equivalent)
-	 * @param testCtx
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	 * @param testCtx testng Test Context
+	 * @throws JAXBException error parsing XACML/XML
+	 * @throws IOException error reading XACML file
 	 */
+	@Test(dataProvider = "xacmlJsonDataProvider")
 	public void validateXacmlJson(final File xacmlJsonFile, final boolean expectedValid, final File expectedXacmlXmlFile, final File actualXacmlXmlFile, final ITestContext testCtx)
-	        throws FileNotFoundException, IOException, JAXBException
+	        throws IOException, JAXBException
 	{
 		/*
 		 * Read properly as UTF-8 to avoid character decoding issues with org.json API

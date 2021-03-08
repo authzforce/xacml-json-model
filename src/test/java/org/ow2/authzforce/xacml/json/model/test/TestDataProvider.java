@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2012-2021 THALES.
  *
  * This file is part of AuthzForce CE.
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public final class TestDataProvider
 {
@@ -100,7 +101,7 @@ public final class TestDataProvider
 				}
 			}
 
-			for (final File jsonFile : validXacmlJsonFilesDir.listFiles(JSON_FILE_FILTER))
+			for (final File jsonFile : Objects.requireNonNull(validXacmlJsonFilesDir.listFiles(JSON_FILE_FILTER)))
 			{
 				/*
 				 * Specific test's resources directory location, used as parameter to PdpTest(String). Check for a XML version of the file.
@@ -127,7 +128,7 @@ public final class TestDataProvider
 			 */
 			final File invalidSrcXmlFilesDir = srcXmlFilesDirRelToMvnProj == null ? null : new File(srcXmlFilesDirRelToMvnProj, INVALID_TEST_DATA_DIRECTORY_NAME);
 
-			for (final File jsonFile : invalidXacmlJsonFilesDataDir.listFiles(JSON_FILE_FILTER))
+			for (final File jsonFile : Objects.requireNonNull(invalidXacmlJsonFilesDataDir.listFiles(JSON_FILE_FILTER)))
 			{
 				/*
 				 * Specific test's resources directory location, used as parameter to PdpTest(String). Check for a XML version of the file.
