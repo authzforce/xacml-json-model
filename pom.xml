@@ -114,6 +114,9 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<header>LICENSE_HEADER.txt</header>
+					<headerDefinitions>
+						<headerDefinition>LICENSE_HEADER_DEFS.xml</headerDefinition>
+					</headerDefinitions>
 					<includes>
 						<include>src/main/java/org/ow2/authzforce/**</include>
 						<!-- Include test files also -->

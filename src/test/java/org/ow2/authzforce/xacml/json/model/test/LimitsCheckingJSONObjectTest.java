@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2012-2021 THALES.
  *
  * This file is part of AuthzForce CE.
@@ -53,33 +53,30 @@ public class LimitsCheckingJSONObjectTest
 
 	/**
 	 * Create test data. Various JSON files.
-	 * 
-	 * 
+	 *
 	 * @return iterator over test data
-	 * @throws URISyntaxException
-	 * @throws IOException
 	 */
 	@DataProvider(name = "jsonDataProvider")
-	public Iterator<Object[]> createData() throws URISyntaxException, IOException
+	public Iterator<Object[]> createData()
 	{
 		return TestDataProvider.createData(Arrays.stream(TEST_DATA_DIRECTORY_LOCATIONS).map(loc -> new AbstractMap.SimpleImmutableEntry<>(new File(loc), (File) null)).collect(Collectors.toList()));
 	}
 
-	@Test(dataProvider = "jsonDataProvider")
 	/**
 	 * 
-	 * @param xacmlJsonFile
+	 * @param xacmlJsonFile XACML/JSON file (Request or Response)
 	 * @param expectedValid
 	 *            true iff validation against JSON schema should succeed
-	 * @param srcXacmlXmlFile
+	 * @param srcXacmlXmlFile original source XACML/XML file
 	 * @param genXacmlXmlFileFromXslt
 	 *            Parameter not used by this test method but value returned anyway by the dataProvider (shared with other tests).
-	 * @param testCtx
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	 * @param testCtx testng Test Context
+	 * @throws JSONException error parsing JSON
+	 * @throws IOException error reading input XACML files
 	 */
+	@Test(dataProvider = "jsonDataProvider")
 	public void test(final File xacmlJsonFile, final boolean expectedValid, final File srcXacmlXmlFile, final File genXacmlXmlFileFromXslt, final ITestContext testCtx)
-	        throws FileNotFoundException, IOException, JSONException
+	        throws IOException, JSONException
 	{
 		/*
 		 * Read properly as UTF-8 to avoid character decoding issues with org.json API

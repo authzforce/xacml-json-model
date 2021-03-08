@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2012-2021 THALES.
  *
  * This file is part of AuthzForce CE.
@@ -24,8 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.*;
 
 /**
  * Instances of JSON schema as defined by JSON Profile of XACML 3.0
@@ -34,7 +34,9 @@ import java.io.InputStream;
 public final class XacmlJsonUtils
 {
     private static final SchemaClient CLASSPATH_AWARE_SCHEMA_CLIENT = SchemaClient.classPathAwareClient();
-    private static Schema loadSchema(String schemaFilenameRelativeToThisClass) {
+
+    private static Schema loadSchema(String schemaFilenameRelativeToThisClass)
+    {
         try (InputStream inputStream = XacmlJsonUtils.class.getResourceAsStream(schemaFilenameRelativeToThisClass))
         {
             final JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
@@ -67,17 +69,61 @@ public final class XacmlJsonUtils
         POLICY_SCHEMA = loadSchema("Policy.schema.json");
     }
 
+    /*
+
+     */
+    private static void canonicalizeObligationsOrAdvice(JSONObject xacmlResult, String obligationsOrAdviceKey, boolean floatWithTrailingZeroToInt)
+    {
+        final JSONArray obligationsOrAdvice = xacmlResult.optJSONArray(obligationsOrAdviceKey);
+        if(obligationsOrAdvice != null) {
+
+            if (obligationsOrAdvice.length() == 0)
+            {
+                xacmlResult.remove(obligationsOrAdviceKey);
+            } else
+            {
+                for (final Object obligation : obligationsOrAdvice)
+                {
+                    assert obligation instanceof JSONObject;
+                    final JSONObject obligationJsonObj = (JSONObject) obligation;
+                    final JSONArray jsonArrayOfAtts = obligationJsonObj.optJSONArray("AttributeAssignment");
+                    if (jsonArrayOfAtts != null)
+                    {
+                        if (jsonArrayOfAtts.length() == 0)
+                        {
+                            obligationJsonObj.remove("AttributeAssignment");
+                        } else
+                        {
+                            for (final Object attJson : jsonArrayOfAtts)
+                            {
+                                assert attJson instanceof JSONObject;
+                                final JSONObject attJsonObj = (JSONObject) attJson;
+                                if (floatWithTrailingZeroToInt)
+                                {
+                                    floatWithTrailingZeroToInt(attJsonObj);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
     /**
      * Canonicalize a XACML/JSON response, typically for comparison with another one. In particular, it removes every Result's status as we choose to ignore the Status. Indeed, a PDP implementation
      * might return a perfectly XACML-compliant response but with extra StatusCode/Message/Detail that we would not expect.
      *
      * WARNING: this method modifies the content of {@code xacmlJsonResponse} directly
+     * FIXME: waiting for 'org.everity.json.schema' to upgrade dependency 'org.json:json' to v20210307 or later in order to fix https://github.com/stleary/JSON-java/issues/589
      *
      * @param xacmlJsonResponse
      *            input XACML Response
+     * @param floatWithTrailingZeroToInt true iff floats with trailing zero (after decimal point) in AttributeValues are converted to Integer, this is originally a workaround for <a href="https://github.com/stleary/JSON-java/issues/589">issue #589 on org.json:json library</a>, used by our dependency 'org.everity.json.schema', which has been fixed in v20210307 of org.json:json; but still waiting for 'org.everity.json.schema' to upgrade.
      * @return canonicalized response
      */
-    public static JSONObject canonicalizeResponse(final JSONObject xacmlJsonResponse)
+    public static JSONObject canonicalizeResponse(final JSONObject xacmlJsonResponse, boolean floatWithTrailingZeroToInt)
     {
         /*
          * We iterate over all results, because for each results, we don't compare everything. In particular, we choose to ignore the StatusMessage, StatusDetail and any nested StatusCode. Indeed, a
@@ -125,23 +171,110 @@ public final class XacmlJsonUtils
                         final JSONArray jsonArrayOfAtts = attCatJsonObj.optJSONArray("Attribute");
                         if (jsonArrayOfAtts != null)
                         {
-                            jsonArrayOfAtts.forEach(attJson ->
+                            if (jsonArrayOfAtts.length() == 0)
                             {
-                                assert attJson instanceof JSONObject;
-                                final JSONObject attJsonObj = (JSONObject) attJson;
-                                attJsonObj.remove("IncludeInResult");
-                            });
+                                attCatJsonObj.remove("Attribute");
+                            } else
+                            {
+                                for (final Object attJson : jsonArrayOfAtts)
+                                {
+                                    assert attJson instanceof JSONObject;
+                                    final JSONObject attJsonObj = (JSONObject) attJson;
+                                    attJsonObj.remove("IncludeInResult");
+                                    if (floatWithTrailingZeroToInt)
+                                    {
+                                        floatWithTrailingZeroToInt(attJsonObj);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
+
+            // Handle attribute values in Obligations and AssociatedAdvice if floatWithTrailingZeroToInt
+            canonicalizeObligationsOrAdvice(resultJsonObj, "Obligations", floatWithTrailingZeroToInt);
+            canonicalizeObligationsOrAdvice(resultJsonObj, "AssociatedAdvice", floatWithTrailingZeroToInt);
+
         }
 
         return xacmlJsonResponse;
+    }
+
+    /*
+    Returns a number if input was a Double with zero fraction, therefore converted to an integer type (BigInteger, Integer, Long, Short); else null
+
+    FIXME: workaround for this issue: https://github.com/stleary/JSON-java/issues/589
+     */
+    private static Number floatWithTrailingZeroToInt(Object input)
+    {
+        if (input instanceof JSONObject)
+        {
+            final JSONObject json = (JSONObject) input;
+            final Map<String, Number> modifiedProperties = new HashMap<>();
+            json.keySet().forEach(key ->
+            {
+                final Number convertedIfNonNull = floatWithTrailingZeroToInt(json.get(key));
+                if (convertedIfNonNull != null)
+                {
+                    // Double value to be changed to an integer
+                    modifiedProperties.put(key, convertedIfNonNull);
+                }
+            });
+            // apply modifications if any
+            modifiedProperties.forEach(json::put);
+            return null;
+        }
+
+        if (input instanceof JSONArray)
+        {
+            final JSONArray json = (JSONArray) input;
+            final Deque<Map.Entry<Integer, Number>> modifiedItems = new ArrayDeque<>(json.length());
+            int index = 0;
+            for (final Object item : json)
+            {
+                final Number convertedIfNonNull = floatWithTrailingZeroToInt(item);
+                if (convertedIfNonNull != null)
+                {
+                    // Double value to be changed to an integer
+                    modifiedItems.addLast(new AbstractMap.SimpleImmutableEntry<>(index, convertedIfNonNull));
+                }
+                index++;
+            }
+            // apply modifications if any
+            modifiedItems.forEach(e -> json.put(e.getKey(), e.getValue()));
+            return null;
+        }
+
+        if (input instanceof Double)
+        {
+            // FIXME: workaround for this issue: https://github.com/stleary/JSON-java/issues/589
+            // if there is some trailing zero, this Double is considered equivalent to an int
+            // The corresponding int is obtained after serializing/deserializing
+            final String serialized = JSONObject.valueToString(input);
+            final Object deserialized = JSONObject.stringToValue(serialized);
+            if (!(deserialized instanceof Double))
+            {
+                // value was converted to an int
+                assert deserialized instanceof Number;
+                return (Number) deserialized;
+            }
+        }
+
+        // nothing to change
+        return null;
     }
 
     private XacmlJsonUtils()
     {
         // hide constructor
     }
+
+    /*
+    public static void main(String[] args) throws FileNotFoundException
+    {
+        final JSONObject jsonWithTrailing0 = XacmlJsonUtils.canonicalizeResponse(new JSONObject(new JSONTokener(new FileInputStream(new File("~/git/authzforce-ce-server/webapp/src/test/resources/xacml.samples/pdp/GeoJSON_good/response.json")))), true);
+        System.out.println(jsonWithTrailing0.toString());
+    }
+     */
 }
