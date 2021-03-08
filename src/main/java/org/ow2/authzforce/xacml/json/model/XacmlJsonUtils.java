@@ -112,6 +112,18 @@ public final class XacmlJsonUtils
     }
 
     /**
+     * Same as {@link #canonicalizeResponse(JSONObject, boolean)} but with second parameter set to false.
+     *
+     * @param xacmlJsonResponse
+     *            input XACML Response
+     * @return canonicalized response
+     */
+    public static JSONObject canonicalizeResponse(final JSONObject xacmlJsonResponse)
+    {
+        return canonicalizeResponse(xacmlJsonResponse, false);
+    }
+
+    /**
      * Canonicalize a XACML/JSON response, typically for comparison with another one. In particular, it removes every Result's status as we choose to ignore the Status. Indeed, a PDP implementation
      * might return a perfectly XACML-compliant response but with extra StatusCode/Message/Detail that we would not expect.
      *
