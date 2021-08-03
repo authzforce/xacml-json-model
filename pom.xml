@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>org.ow2.authzforce</groupId>
 		<artifactId>authzforce-ce-parent</artifactId>
-		<version>8.0.0</version>
+		<version>8.0.2</version>
 	</parent>
 	<artifactId>authzforce-ce-xacml-json-model</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.2</version>
+	<version>3.0.3</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>AuthzForce - Data model for JSON Profile of XACML 3.0</description>
 	<url>${project.url}</url>
