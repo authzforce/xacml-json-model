@@ -2,6 +2,12 @@
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
 
+## 3.0.3
+### Fixed
+- Fix for https://github.com/authzforce/server/issues/64 (loading schemas in offline mode)
+- CVE-2021-22118: updated parent version to 8.0.2 -> Spring to 5.2.15
+
+
 ## 3.0.2
 ### Fixed
 - Backward compatibility on XacmlJsonUtils#canonicalizeResponse(), i.e. avoid breaking compatibility for reverse dependencies
