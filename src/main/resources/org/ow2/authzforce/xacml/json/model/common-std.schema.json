@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema",
-	"$id": "https://raw.githubusercontent.com/authzforce/xacml-json-model/master/src/main/resources/org/ow2/authzforce/xacml/json/model/common-std.schema.json",
 	"title": "Common JSON schema to Request and Response objects defined in JSON profile of XACML 3.0 v1.0",
+	"description": "WARNING: don't specify an $id property, else the resolution of this schema on the classpath using $ref from other schemas and resolutionScope with JSON Schema Validator (https://github.com/everit-org/json-schema) will fail.",
 	"definitions": 
 	{
 		"AttributeValueType": 
