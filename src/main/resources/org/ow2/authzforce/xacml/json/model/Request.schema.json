@@ -1,7 +1,8 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema",
-	"$id": "https://raw.githubusercontent.com/authzforce/xacml-json-model/master/src/main/resources/org/ow2/authzforce/xacml/json/model/Request.schema.json",
+	"$id": "Request.schema.json",
 	"title": "JSON schema of Request object defined in JSON profile of XACML 3.0 v1.0",
+	"description": "",
 	"definitions": 
 	{
 		"RequestReferenceType": 
