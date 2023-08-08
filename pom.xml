@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.ow2.authzforce</groupId>
 		<artifactId>authzforce-ce-parent</artifactId>
-		<version>8.0.3</version>
+		<version>8.5.0</version>
 	</parent>
 	<artifactId>authzforce-ce-xacml-json-model</artifactId>
 	<packaging>jar</packaging>
@@ -32,13 +32,13 @@
 			<artifactId>spring-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.everit-org.json-schema</groupId>
-			<artifactId>org.everit.json.schema</artifactId>
+			<groupId>com.github.erosb</groupId>
+			<artifactId>everit-json-schema</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>6.11</version>
+			<version>7.8.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -147,6 +147,7 @@
 					<dependency>
 						<groupId>net.sf.saxon</groupId>
 						<artifactId>Saxon-HE</artifactId>
+						<!-- Must match the version in ivy.xml -->
 						<version>9.8.0-15</version>
 					</dependency>
 					<dependency>
@@ -214,7 +215,7 @@
 					<!-- Using multiple test suites simplifies debugging and prevent some TestNG issues happening when reusing same class/methods over multiple tests in same test suite -->
 					<!-- <suiteXmlFile>src/test/suite.xml</suiteXmlFile> -->
 					<!-- </suiteXmlFiles> -->
-					<skipAfterFailureCount>1</skipAfterFailureCount>
+					<skipAfterFailureCount>0</skipAfterFailureCount>
 					<!-- redirectTestOutputToFile: set this to 'true' to redirect the unit test standard output to a file (found in reportsDirectory/testName-output.txt) -->
 					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 					<systemPropertyVariables>
