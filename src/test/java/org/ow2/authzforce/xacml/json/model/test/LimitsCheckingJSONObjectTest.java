@@ -18,7 +18,6 @@
 package org.ow2.authzforce.xacml.json.model.test;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.AbstractMap;
