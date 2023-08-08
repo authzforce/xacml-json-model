@@ -2,6 +2,16 @@
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
 
+## 3.0.5
+### Fixed
+- CVEs by upgrading:
+  - Parent project (authzforce-ce-parent): 8.5.0
+  - Maven dependencies:
+    - authzforce-ce-xacml-model: 8.5.0 
+    - com.github.everit-org.json-schema/org.everit.json.schema -> com.github.erosb/everit-json-schema: 1.14.2
+    - Spring Core: 5.3.29
+- `authzforce-ce-xacml-model` dependency: missing `XacmlAttributeId` enum value for standard XACML 3.0 Core attribute `urn:oasis:names:tc:xacml:2.0:resource:target-namespace` (used for `<Content>` processing) has been added
+
 ## 3.0.4
 ### Fixed 
 - CVE-2021-22696 and CVE-2021-3046 fixed by upgrading **authzforce-ce-parent to v8.0.3**
