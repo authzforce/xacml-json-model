@@ -2,6 +2,15 @@
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
 
+## 4.0.0
+### Changed
+- Java 17 as minimum required version
+- Upgraded parent project (authzforce-ce-parent): 9.0.0
+- Upgraded dependences
+    - Spring Core: 6.0.11
+    - everit-json-schema: 1.14.3
+
+
 ## 3.0.5
 ### Fixed
 - CVEs by upgrading:
