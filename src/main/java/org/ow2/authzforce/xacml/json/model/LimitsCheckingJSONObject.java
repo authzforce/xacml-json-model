@@ -168,7 +168,7 @@ public final class LimitsCheckingJSONObject extends JSONObject
 					this.back();
 
 					string = sb.toString().trim();
-					if ("".equals(string))
+					if (string.isEmpty())
 					{
 						throw this.syntaxError("Missing value");
 					}
