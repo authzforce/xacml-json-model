@@ -1,6 +1,14 @@
 # Change log
 All notable changes to this project are documented in this file following the [Keep a CHANGELOG](http://keepachangelog.com) conventions. This project adheres to [Semantic Versioning](http://semver.org).
 
+## 4.2.0
+### Changed
+- Upgraded parent project (authzforce-ce-parent): 9.2.0
+- Upgraded dependencies
+    - Spring core: 6.2.15 
+    - everit-json-schema: 1.14.6
+
+
 ## 4.1.0
 ### Changed
 - Upgraded parent project (authzforce-ce-parent): 9.1.0
