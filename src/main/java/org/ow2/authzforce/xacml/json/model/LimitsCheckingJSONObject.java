@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2024 THALES.
+ * Copyright 2012-2026 THALES.
  *
  * This file is part of AuthzForce CE.
  *
@@ -172,7 +172,7 @@ public final class LimitsCheckingJSONObject extends JSONObject
 					{
 						throw this.syntaxError("Missing value");
 					}
-					return JSONObject.stringToValue(string);
+					return stringToValue(string);
 			}
 
 		}
@@ -205,7 +205,7 @@ public final class LimitsCheckingJSONObject extends JSONObject
 					if (x.nextClean() == ',')
 					{
 						x.back();
-						put(JSONObject.NULL);
+						put(NULL);
 					}
 					else
 					{

@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.ow2.authzforce</groupId>
 		<artifactId>authzforce-ce-parent</artifactId>
-		<version>9.1.0</version>
+		<version>9.2.0</version>
 	</parent>
 	<artifactId>authzforce-ce-xacml-json-model</artifactId>
 	<packaging>jar</packaging>
@@ -63,7 +63,7 @@
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
 				<configuration>
-					<cveValidForHours>24</cveValidForHours>
+					<nvdValidForHours>24</nvdValidForHours>
 					<!-- The plugin has numerous issues with version matching, which triggers false positives so we need a "suppresion" file for those. More info: https://github.com/jeremylong/DependencyCheck/issues -->
 					<suppressionFile>owasp-dependency-check-suppression.xml</suppressionFile>
 					<failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
@@ -108,6 +108,9 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<failThreshold>Medium</failThreshold>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.mycila</groupId>
